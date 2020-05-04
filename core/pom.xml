@@ -4,12 +4,17 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.prypurity</groupId>
-    <artifactId>xiaviccore</artifactId>
+    <parent>
+        <groupId>com.github.prypurity</groupId>
+        <artifactId>xiaviccore-parent</artifactId>
+        <version>1.0</version>
+    </parent>
+
+    <artifactId>core</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>XiavicCore</name>
+    <name>Core</name>
 
     <description>A</description>
     <properties>
@@ -33,25 +38,11 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <relocations>
-                                <relocation>
-                                    <pattern>de.leonhard.storage</pattern>
-                                    <shadedPattern>com.github.prypurity.xiaviccore.storage</shadedPattern>
-                                </relocation>
-                            </relocations>
-                        </configuration>
-                    </execution>
-                </executions>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <outputDirectory>${project.parent.build.directory}</outputDirectory>
+                </configuration>
             </plugin>
         </plugins>
         <resources>
@@ -61,33 +52,4 @@
             </resource>
         </resources>
     </build>
-
-    <repositories>
-        <repository>
-            <id>spigotmc-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-        <repository>
-            <id>sonatype</id>
-            <url>https://oss.sonatype.org/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.15.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.JavaFactoryDev</groupId>
-            <artifactId>LightningStorage</artifactId>
-            <version>3.1.0</version>
-        </dependency>
-    </dependencies>
 </project>

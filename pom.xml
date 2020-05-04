@@ -9,10 +9,11 @@
     <version>1.0</version>
     <packaging>pom</packaging>
 
-    <name>XiavicCore</name>
+    <name>XiavicCore-Parent</name>
     <modules>
         <module>core</module>
-        <module>bukkit-v1.15</module>
+        <module>bukkit-1.15</module>
+        <module>jar-builder</module>
     </modules>
 
     <description>A</description>
