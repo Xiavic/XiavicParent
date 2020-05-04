@@ -1,14 +1,13 @@
 package com.github.prypurity.xiaviccore.v1_15_R1;
 
-import com.github.prypurity.xiaviccore.NMSHandler.NMS;
+
+import com.github.prypurity.xiaviccore.Utils.ISignEditor;
+import com.github.prypurity.xiaviccore.Utils.NMSHandler.NMS;
 import com.github.prypurity.xiaviccore.Utils.inventory.InventorySerializer;
-import com.github.prypurity.xiaviccore.Utils.signeditor.ISignEditor;
 
 public class NMSImpl implements NMS {
 
-    public NMSImpl() {
-
-    }
+    public NMSImpl() {}
 
     @Override public ISignEditor getSignEditor() {
         throw new UnsupportedOperationException();

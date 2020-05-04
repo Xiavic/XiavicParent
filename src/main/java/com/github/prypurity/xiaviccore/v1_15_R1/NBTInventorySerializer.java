@@ -24,7 +24,7 @@ public enum  NBTInventorySerializer implements InventorySerializer {
      * @return Returns a byte array consisting of the binary representation
      * of the inventory NBT.
      */
-    @Override public byte[] serializeToNBT(
+    @Override public byte[] serialize(
         final org.bukkit.inventory.PlayerInventory playerInventory) {
         final PlayerInventory inventory = ((CraftInventoryPlayer) playerInventory).getInventory();
         final NBTTagCompound compound = new NBTTagCompound();
@@ -41,7 +41,7 @@ public enum  NBTInventorySerializer implements InventorySerializer {
     /**
      * Apply the deserialized NBT onto a player. This method mutates the player's inventory!
      *
-     * @param bytes  The byte array (binary) representation of a player's inventory in NBT {@link #serializeToNBT(org.bukkit.inventory.PlayerInventory)}
+     * @param bytes  The byte array (binary) representation of a player's inventory in NBT {@link #serialize(org.bukkit.inventory.PlayerInventory)}
      * @param player The {@link Player} object to apply onto.
      */
     @Override public void applyInventoryOnto(final Player player, final byte[] bytes) {
