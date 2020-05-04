@@ -20,8 +20,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static com.github.prypurity.xiaviccore.Main.messages;
-
 /**
  * Represents the command used to obtain a head for a given player.
  */
@@ -45,15 +43,15 @@ public class HeadCommand implements TabExecutor {
                     skull.setItemMeta(skullMeta);
                     Utils.placeInCursorSlot(sender, skull); //TODO add a fail/success message.
                 } else {
-                    Utils.chat(commandSender, messages.getString("PlayerNotFound"));
+                    Utils.chat(commandSender, Main.messages.getString("PlayerNotFound"));
                     return true;
                 }
             } else {
-                Utils.chat(commandSender, messages.getString("SenderNotPlayer"));
+                Utils.chat(commandSender, Main.messages.getString("SenderNotPlayer"));
                 return true;
             }
         } else {
-            Utils.chat(commandSender, messages.getString("SpecifyTarget"));
+            Utils.chat(commandSender, Main.messages.getString("SpecifyTarget"));
             return true;
         }
         return true;

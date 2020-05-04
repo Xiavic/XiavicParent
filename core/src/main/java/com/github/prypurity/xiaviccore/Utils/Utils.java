@@ -87,6 +87,10 @@ public class Utils {
         }
     }
 
+    public static String getNMSVersion() {
+        return Bukkit.getBukkitVersion();
+    }
+
     // This teleport method lets you send a message to the player here instead of
     // having to do it where ever you called this method
     @Deprecated public static void teleport(Player player, Location location, String messagePath) {

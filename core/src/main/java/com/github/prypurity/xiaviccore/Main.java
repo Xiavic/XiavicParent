@@ -2,12 +2,10 @@ package com.github.prypurity.xiaviccore;
 
 import com.github.prypurity.xiaviccore.Commands.StaffCmds.cheats.CheatArmor;
 import com.github.prypurity.xiaviccore.Commands.StaffCmds.cheats.CheatEXP;
-import com.github.prypurity.xiaviccore.Commands.StaffCmds.noncheat.*;
 import com.github.prypurity.xiaviccore.Commands.StaffCmds.noncheat.teleport.TPPosCommand;
 import com.github.prypurity.xiaviccore.Commands.StaffCmds.noncheat.teleport.TPhereCommand;
 import com.github.prypurity.xiaviccore.Commands.StaffCmds.noncheat.teleport.TeleportCommand;
 import com.github.prypurity.xiaviccore.Commands.StaffCmds.noncheat.teleport.TpallCommand;
-import com.github.prypurity.xiaviccore.Commands.UserCmds.Essential.*;
 import com.github.prypurity.xiaviccore.Commands.UserCmds.Essential.Teleport.BackCommand;
 import com.github.prypurity.xiaviccore.Commands.UserCmds.Essential.Teleport.RandomTPCommand;
 import com.github.prypurity.xiaviccore.Commands.UserCmds.Essential.Teleport.SpawnCommand;
@@ -16,6 +14,7 @@ import com.github.prypurity.xiaviccore.Commands.UserCmds.Essential.Teleport.Tpa.
 import com.github.prypurity.xiaviccore.Commands.UserCmds.Essential.Teleport.Tpa.TpdenyCommand;
 import com.github.prypurity.xiaviccore.Commands.UserCmds.Fun.*;
 import com.github.prypurity.xiaviccore.Commands.UserCmds.Fun.Links.*;
+import com.github.prypurity.xiaviccore.NMSHandler.NMS;
 import com.github.prypurity.xiaviccore.Utils.EquipAnything.EquipEvents;
 import com.github.prypurity.xiaviccore.Utils.Files.Messages;
 import com.github.prypurity.xiaviccore.Utils.Files.Permissions;
@@ -24,6 +23,9 @@ import com.github.prypurity.xiaviccore.Utils.Listeners.JoinQuit;
 import com.github.prypurity.xiaviccore.Utils.Listeners.RespawnEvent;
 import com.github.prypurity.xiaviccore.Utils.Listeners.TeleportHandler;
 import com.github.prypurity.xiaviccore.Utils.Tpa.TpaHandler;
+import com.github.prypurity.xiaviccore.Commands.StaffCmds.noncheat.*;
+import com.github.prypurity.xiaviccore.Commands.UserCmds.Essential.*;
+import com.github.prypurity.xiaviccore.Utils.Utils;
 import de.leonhard.storage.Json;
 import de.leonhard.storage.LightningBuilder;
 import de.leonhard.storage.Yaml;
@@ -35,7 +37,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 
 
 public final class Main extends JavaPlugin {
@@ -49,6 +51,7 @@ public final class Main extends JavaPlugin {
     public static Yaml commands;
     public static TpaHandler tpaHandler;
     public static TeleportHandler teleportHandler;
+    public static NMS nmsImpl;
     private static Main instance;
 
     // Handle Instance of plugin in multiple classes.
@@ -58,6 +61,10 @@ public final class Main extends JavaPlugin {
 
     public void onEnable() {
         instance = this;
+        if (!registerNMSHandler()) { //If NMS compat failed, exit.
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
         setupStorage(); // Loads or Copy Default Configuration
         // loadshit();
         Bukkit.getConsoleSender().sendMessage(" ");
@@ -148,6 +155,23 @@ public final class Main extends JavaPlugin {
         teleportHandler = new TeleportHandler();
         AFKHandler.INSTANCE.registerTicker();
         AFKHandler.INSTANCE.loadDefaults();
+    }
+
+    private boolean registerNMSHandler() {
+        if (Main.nmsImpl == null) {
+            try {
+                final Class<?> clazz = Class.forName(
+                    "com.github.prypurity.xiaviccore." + Utils.getNMSVersion() + ".NMSImpl");
+                final Class<? extends NMS> nmsImplClass = clazz.asSubclass(NMS.class);
+                Main.nmsImpl = nmsImplClass.newInstance();
+            } catch (final ReflectiveOperationException ex) {
+                ex.printStackTrace();
+                final String message =  messages.getString("ServerVersionUnsupported");
+                getLogger().log(Level.SEVERE, Utils.chat(message.replace("%version%", Utils.getNMSVersion())));
+                return false;
+            }
+        }
+        return true;
     }
 
     // Handling of configuration file with Json, Yaml, and Toml
