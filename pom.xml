@@ -12,5 +12,17 @@
     <artifactId>xavic-bukkit-1.15</artifactId>
     <name>Xavic-Bukkit-1.15</name>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>1.15.2-R0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.prypurity</groupId>
+            <artifactId>core</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
 
 </project>
