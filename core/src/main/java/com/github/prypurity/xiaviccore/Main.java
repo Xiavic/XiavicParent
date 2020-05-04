@@ -23,7 +23,9 @@ import com.github.prypurity.xiaviccore.Utils.Listeners.AFKHandler;
 import com.github.prypurity.xiaviccore.Utils.Listeners.JoinQuit;
 import com.github.prypurity.xiaviccore.Utils.Listeners.RespawnEvent;
 import com.github.prypurity.xiaviccore.Utils.Listeners.TeleportHandler;
+import com.github.prypurity.xiaviccore.Utils.NMSHandler.NMS;
 import com.github.prypurity.xiaviccore.Utils.Tpa.TpaHandler;
+import com.github.prypurity.xiaviccore.Utils.Utils;
 import de.leonhard.storage.Json;
 import de.leonhard.storage.LightningBuilder;
 import de.leonhard.storage.Yaml;
@@ -35,6 +37,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.logging.Level;
 
 
 public final class Main extends JavaPlugin {
@@ -49,6 +52,7 @@ public final class Main extends JavaPlugin {
     public static TpaHandler tpaHandler;
     public static TeleportHandler teleportHandler;
     private static Main instance;
+    public static NMS nmsImpl; //Should never be null after plugin init has completed.
 
     // Handle Instance of plugin in multiple classes.
     public static Main getInstance() {
@@ -57,8 +61,13 @@ public final class Main extends JavaPlugin {
 
     public void onEnable() {
         instance = this;
+        if (!registerNMSHandler()) { //If NMS compat failed, exit.
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
         setupStorage(); // Loads or Copy Default Configuration
         // loadshit();
+
         Bukkit.getConsoleSender().sendMessage(" ");
         Bukkit.getConsoleSender().sendMessage(" XIAVIC CORE IS ACTIVATED... ");
         Bukkit.getConsoleSender().sendMessage(" ");
@@ -145,6 +154,23 @@ public final class Main extends JavaPlugin {
     private void registerShit() {
         tpaHandler = new TpaHandler();
         teleportHandler = new TeleportHandler();
+    }
+
+    private boolean registerNMSHandler() {
+        if (Main.nmsImpl == null) {
+            try {
+                final Class<?> clazz = Class.forName(
+                    "com.github.prypurity.xiaviccore." + Bukkit.getBukkitVersion() + ".NMSImpl");
+                final Class<? extends NMS> nmsImplClass = clazz.asSubclass(NMS.class);
+                Main.nmsImpl = nmsImplClass.newInstance();
+            } catch (final ReflectiveOperationException ex) {
+                ex.printStackTrace();
+                final String message =  messages.getString("ServerVersionUnsupported");
+                getLogger().log(Level.SEVERE, Utils.chat(message.replace("%version%", Bukkit.getBukkitVersion())));
+                return false;
+            }
+        }
+        return true;
     }
 
     // Handling of configuration file with Json, Yaml, and Toml
