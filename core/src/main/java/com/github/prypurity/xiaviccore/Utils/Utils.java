@@ -2,8 +2,10 @@ package com.github.prypurity.xiaviccore.Utils;
 
 import com.github.prypurity.xiaviccore.Main;
 import com.github.prypurity.xiaviccore.Utils.Listeners.TeleportHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -57,6 +59,11 @@ public class Utils {
 
     public static long fromTicks(final long ticks, final TimeUnit timeUnit) {
         return timeUnit.convert(ticks / 50, timeUnit);
+    }
+
+    public static String parseNMSVersion() {
+        final Server server = Bukkit.getServer();
+        return server.getClass().getPackage().getName().replace("org.bukkit.craftbukkit", "");
     }
 
     @Deprecated

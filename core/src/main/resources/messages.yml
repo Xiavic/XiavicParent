@@ -87,8 +87,11 @@ WheatherChanged: "&aYou have changed the weather to, &e%weather%"
 World: "&bYou have been teleported to the spawn of %world%"
 
 #Misc
-Repair_Success: "&cThis item cannot be repaired."
-Repair_Failure: "&aItem Repaired!"
+AFK: "%player% is now AFK"
+NotAFK: "%player% is no longer AFK"
+Repair_Success: "&aItem Repaired!"
+Repair_Failure: "&cThis item cannot be repaired."
+NotLookingAtSign: "&cYou must be looking at a sign!"
 
 # How 2 Use Messages a.k.a. Help Text
 WhoIsHelp: "/whois <player>"

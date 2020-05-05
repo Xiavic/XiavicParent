@@ -120,6 +120,7 @@ public final class Main extends JavaPlugin {
         getCommand("repair").setExecutor(new RepairCommand());
         getCommand("setfirstspawn").setExecutor(new FirstSpawnSetCommand());
         getCommand("setspawn").setExecutor(new SpawnSetCommand());
+        getCommand("signedit").setExecutor(new SignEditorCommand());
         getCommand("spawn").setExecutor(new SpawnCommand());
         getCommand("stonecutter").setExecutor(new StonecutterCommand());
         getCommand("sudo").setExecutor(new SudoCommand());
@@ -160,13 +161,13 @@ public final class Main extends JavaPlugin {
         if (Main.nmsImpl == null) {
             try {
                 final Class<?> clazz = Class.forName(
-                    "com.github.prypurity.xiaviccore." + Bukkit.getBukkitVersion() + ".NMSImpl");
+                    "com.github.prypurity.xiaviccore" + Utils.parseNMSVersion() + ".NMSImpl");
                 final Class<? extends NMS> nmsImplClass = clazz.asSubclass(NMS.class);
                 Main.nmsImpl = nmsImplClass.newInstance();
             } catch (final ReflectiveOperationException ex) {
                 ex.printStackTrace();
                 final String message =  messages.getString("ServerVersionUnsupported");
-                getLogger().log(Level.SEVERE, Utils.chat(message.replace("%version%", Bukkit.getBukkitVersion())));
+                getLogger().log(Level.SEVERE, Utils.chat(message.replace("%version%", Bukkit.getVersion())));
                 return false;
             }
         }

@@ -47,7 +47,14 @@
                         <configuration>
                             <outputDirectory>${project.parent.build.directory}</outputDirectory>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <finalName>xaviccore-${project.version}</finalName>
+                            <finalName>xiaviccore-${project.version}</finalName>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>org.jetbrains:annotations</exclude>
+                                    <exclude>org.json:json</exclude>
+                                    <exclude>com.esotericsoftware.yamlbeans:yamlbeans</exclude>
+                                </excludes>
+                            </artifactSet>
                             <relocations>
                                 <relocation>
                                     <pattern>de.leonhard.storage</pattern>
@@ -81,6 +88,11 @@
         <dependency>
             <groupId>com.github.prypurity</groupId>
             <artifactId>core</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.prypurity</groupId>
+            <artifactId>xavic-bukkit-1.15</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>
