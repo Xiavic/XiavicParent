@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>xiavic-bukkit-1.13</artifactId>
+    <name>xiavic-bukkit-1.13</name>
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
