@@ -92,7 +92,22 @@
         </dependency>
         <dependency>
             <groupId>com.github.prypurity</groupId>
-            <artifactId>xavic-bukkit-1.15</artifactId>
+            <artifactId>xiavic-bukkit-1.15</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.prypurity</groupId>
+            <artifactId>xiavic-bukkit-1.14</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.prypurity</groupId>
+            <artifactId>xiavic-bukkit-1.13</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.prypurity</groupId>
+            <artifactId>xiavic-bukkit-1.13-legacy</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>
