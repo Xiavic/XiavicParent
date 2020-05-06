@@ -21,13 +21,14 @@
 Account: "&2Your account balance is currently &e%money%."
 
 # Common
+InvalidArgs: "&cInvalid Arguments: %reason%"
 PlayerNotFound: "&cThat Player is not found or is not online!"
 PlayerNotFound2: "&cOne of the players are not online!"
-SenderNotPlayer: "You are not a fucking player!"
-SpecifyTarget: "You must specify the target"
-ServerVersionUnsupported: "Sorry, %version% is unsupported."
-NoSuchWorld: "Unknown world"
-NoSuchCommand: "Unknown command"
+SenderNotPlayer: "&cYou are not a fucking player!"
+SpecifyTarget: "&cYou must specify the target"
+ServerVersionUnsupported: "&cSorry, %version% is unsupported."
+NoSuchWorld: "&cUnknown world"
+NoSuchCommand: "&cUnknown command"
 NoPerms: "&4You have no power here..."
 Enabled: "Enabled... bitch"
 Disabled: "Disabled... bitch"
@@ -88,10 +89,15 @@ World: "&bYou have been teleported to the spawn of %world%"
 
 #Misc
 AFK: "%player% is now AFK"
+DynamicSignEditToggled: "&aDynamic Sign Editing is now %state%"
 NotAFK: "%player% is no longer AFK"
+NotLookingAtSign: "&cYou must be looking at a sign!"
 Repair_Success: "&aItem Repaired!"
 Repair_Failure: "&cThis item cannot be repaired."
-NotLookingAtSign: "&cYou must be looking at a sign!"
+SignEdited: "&bThe sign has been edited."
+SignTooManyLines: "&eYou have provided too many lines: %lines%"
+SignLineCharOverflow: "&eToo many characters Max = 15, Provided: %length%"
+SignEditFailed: "&eFailed to edit this sign!"
 
 # How 2 Use Messages a.k.a. Help Text
 WhoIsHelp: "/whois <player>"

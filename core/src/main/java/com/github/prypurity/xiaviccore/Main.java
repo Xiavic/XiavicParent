@@ -149,6 +149,7 @@ public final class Main extends JavaPlugin {
         pm.registerEvents(new RespawnEvent(), this);
         pm.registerEvents(teleportHandler, this);
         AFKHandler.INSTANCE.registerTicker();
+        pm.registerEvents(nmsImpl.getSignEditor(), this);
     }
 
     // Use this function for creating new shit

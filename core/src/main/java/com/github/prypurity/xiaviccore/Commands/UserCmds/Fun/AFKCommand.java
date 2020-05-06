@@ -29,7 +29,6 @@ public class AFKCommand implements CommandExecutor {
         final UUID player = ((Player) sender).getUniqueId();
         final boolean currentlyAfk = AFKHandler.INSTANCE.isAFK(player);
         AFKHandler.INSTANCE.setAFK(player, !currentlyAfk);
-        //TODO send message?
         return true;
     }
 }

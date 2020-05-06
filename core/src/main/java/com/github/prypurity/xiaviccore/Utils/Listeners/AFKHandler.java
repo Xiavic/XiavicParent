@@ -58,7 +58,7 @@ public enum AFKHandler implements Listener {
         tickCount.entrySet().removeIf(entry -> {
             entry.setValue(entry.getValue() - 1);
             if (entry.getValue() < 0) {
-                setAFK(entry.getKey(), true);
+                notAFK.remove(entry.getKey());
                 return true;
             }
             return false;
@@ -73,7 +73,7 @@ public enum AFKHandler implements Listener {
         return !notAFK.contains(player);
     }
 
-    public void setAFK(final UUID player, final boolean afk) {
+    public void setAFK(final UUID player, final boolean afk) { //TODO add broadcast
         final boolean currentlyAFK = isAFK(player);
         tickCount.remove(player);
         if (!currentlyAFK && afk) { //Becomes afk
@@ -84,7 +84,7 @@ public enum AFKHandler implements Listener {
         }
     }
 
-    private final void clearReferences(final UUID player) {
+    private void clearReferences(final UUID player) {
         notAFK.remove(player);
         tickCount.remove(player);
     }
