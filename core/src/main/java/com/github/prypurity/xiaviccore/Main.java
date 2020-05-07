@@ -26,7 +26,6 @@ import com.github.prypurity.xiaviccore.Utils.Listeners.TeleportHandler;
 import com.github.prypurity.xiaviccore.Utils.NMSHandler.NMS;
 import com.github.prypurity.xiaviccore.Utils.Tpa.TpaHandler;
 import com.github.prypurity.xiaviccore.Utils.Utils;
-import de.leonhard.storage.Json;
 import de.leonhard.storage.LightningBuilder;
 import de.leonhard.storage.Yaml;
 import de.leonhard.storage.internal.settings.ConfigSettings;
@@ -160,7 +159,7 @@ public final class Main extends JavaPlugin {
         if (Main.nmsImpl == null) {
             try {
                 final Class<?> clazz = Class.forName(
-                    "com.github.prypurity.xiaviccore" + Utils.parseNMSVersion() + ".NMSImpl");
+                        "com.github.prypurity.xiaviccore" + Utils.parseNMSVersion() + ".NMSImpl");
                 final Class<? extends NMS> nmsImplClass = clazz.asSubclass(NMS.class);
                 Main.nmsImpl = nmsImplClass.getDeclaredConstructor().newInstance();
             } catch (final ReflectiveOperationException ex) {
@@ -217,7 +216,7 @@ public final class Main extends JavaPlugin {
         //             .addInputStreamFromResource("commands.yml")
         //             .setConfigSettings(ConfigSettings.PRESERVE_COMMENTS)
         //             .setReloadSettings(ReloadSettings.AUTOMATICALLY)
-        //             .setDataType(DataType.SORTED)
+        ///             .setDataType(DataType.SORTED)
         //             .createConfig();
 
         //     ////////////////
