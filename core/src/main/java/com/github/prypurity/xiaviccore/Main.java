@@ -216,7 +216,7 @@ public final class Main extends JavaPlugin {
         //             .addInputStreamFromResource("commands.yml")
         //             .setConfigSettings(ConfigSettings.PRESERVE_COMMENTS)
         //             .setReloadSettings(ReloadSettings.AUTOMATICALLY)
-        //             .setDataType(DataType.SORTED)
+        ///             .setDataType(DataType.SORTED)
         //             .createConfig();
 
         //     ////////////////
