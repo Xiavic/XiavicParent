@@ -49,6 +49,7 @@ public class SignEditorCommand implements TabExecutor {
                         }
                         iSignEditor.toggleDynamicEditing(player.getUniqueId(), toggle);
                         Utils.chat(player, toggleMessage);
+                        return true;
                     } else {
                         final String messageKey =
                             iSignEditor.isDynamicEditingEnabled(player.getUniqueId()) ?
