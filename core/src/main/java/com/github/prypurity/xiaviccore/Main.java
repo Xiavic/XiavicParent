@@ -162,7 +162,7 @@ public final class Main extends JavaPlugin {
                 final Class<?> clazz = Class.forName(
                     "com.github.prypurity.xiaviccore" + Utils.parseNMSVersion() + ".NMSImpl");
                 final Class<? extends NMS> nmsImplClass = clazz.asSubclass(NMS.class);
-                Main.nmsImpl = nmsImplClass.newInstance();
+                Main.nmsImpl = nmsImplClass.getDeclaredConstructor().newInstance();
             } catch (final ReflectiveOperationException ex) {
                 ex.printStackTrace();
                 final String message = messages.getString("ServerVersionUnsupported");
