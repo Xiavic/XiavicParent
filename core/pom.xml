@@ -27,6 +27,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.7.0</version>
                 <configuration>
+                    <outputDirectory>${project.parent.build.directory}</outputDirectory>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                 </configuration>
@@ -46,7 +47,8 @@
                             <relocations>
                                 <relocation>
                                     <pattern>de.leonhard.storage</pattern>
-                                    <shadedPattern>com.github.prypurity.xiaviccore.storage</shadedPattern>
+                                    <shadedPattern>com.github.prypurity.xiaviccore.storage
+                                    </shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
