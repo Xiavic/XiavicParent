@@ -92,7 +92,7 @@ public enum AFKHandler implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChat(final AsyncPlayerChatEvent event) {
         Bukkit.getScheduler()
-            .runTask(Main.getInstance(), () -> reset(event.getPlayer().getUniqueId()));
+                .runTask(Main.getInstance(), () -> reset(event.getPlayer().getUniqueId()));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

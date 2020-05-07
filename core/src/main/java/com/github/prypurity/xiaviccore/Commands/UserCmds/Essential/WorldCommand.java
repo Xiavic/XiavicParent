@@ -31,8 +31,9 @@ public class WorldCommand implements TabExecutor {
     private static final String mustBePlayer = messages.getString("SenderNotPlayer");
     private static final String tpFailure = messages.getString("Tp_Failed");
 
-    @Override public boolean onCommand(@NotNull final CommandSender commandSender,
-        @NotNull final Command command, @NotNull final String s, @NotNull final String[] strings) {
+    @Override
+    public boolean onCommand(@NotNull final CommandSender commandSender,
+                             @NotNull final Command command, @NotNull final String s, @NotNull final String[] strings) {
         if (!commandSender.hasPermission(permission) || !commandSender.isOp()) {
             Utils.chat(commandSender, noPermission);
             return true;
@@ -52,7 +53,7 @@ public class WorldCommand implements TabExecutor {
         }
         final Location location = world.getSpawnLocation();
         if (!((Player) commandSender)
-            .teleport(location)) { //Teleport the player to the given world's spawn location.
+                .teleport(location)) { //Teleport the player to the given world's spawn location.
             Utils.chat(commandSender, tpFailure);
         }
         return true;
@@ -61,9 +62,10 @@ public class WorldCommand implements TabExecutor {
     /**
      * Tab completes based off of {@link Bukkit#getWorlds)}.
      */
-    @Override public @Nullable List<String> onTabComplete(
-        @NotNull final CommandSender commandSender, @NotNull final Command command,
-        @NotNull final String s, @NotNull final String[] strings) {
+    @Override
+    public @Nullable List<String> onTabComplete(
+            @NotNull final CommandSender commandSender, @NotNull final Command command,
+            @NotNull final String s, @NotNull final String[] strings) {
         if (!commandSender.hasPermission(permission) || !commandSender.isOp()) {
             return Collections.emptyList();
         }

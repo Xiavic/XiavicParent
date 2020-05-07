@@ -36,14 +36,14 @@ public class WalkSpeedCommand implements CommandExecutor {
                             player.setWalkSpeed((float) 0.9);
                         } else if (speed.equalsIgnoreCase("10")) {
                             player.setWalkSpeed(1);
+                        } else {
+                            Utils.chat(player, Main.messages.getString("InvalidNumber"));
                         }
                         Utils.chat(player, Main.messages.getString("WalkSpeed").replace("%amount%", speed));
                     } else {
                         Utils.chat(player, Main.messages.getString("NoPerms"));
                     }
                     return true;
-                } else {
-                    Utils.chat(player, Main.messages.getString("InvalidNumber"));
                 }
             }
         } else {

@@ -37,7 +37,8 @@ public class Utils {
     /**
      * Attempt to replace the currently held item to a new one. The old item will be moved to
      * the next empty slot.
-     * @param player The player's {@link Player} instance.
+     *
+     * @param player    The player's {@link Player} instance.
      * @param itemStack The {@link ItemStack} to replace - if null, air will be set instead.
      * @return Returns whether or not the swap was successful.
      */

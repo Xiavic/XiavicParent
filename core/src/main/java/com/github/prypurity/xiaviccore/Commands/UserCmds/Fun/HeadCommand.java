@@ -31,8 +31,9 @@ public class HeadCommand implements TabExecutor {
         Main.getInstance().getCommand("head").setAliases(Collections.singletonList("skull"));
     }
 
-    @Override public boolean onCommand(@NotNull final CommandSender commandSender,
-        @NotNull final Command command, @NotNull final String s, @NotNull final String[] strings) {
+    @Override
+    public boolean onCommand(@NotNull final CommandSender commandSender,
+                             @NotNull final Command command, @NotNull final String s, @NotNull final String[] strings) {
         if (strings.length < 1) {
             Utils.chat(commandSender, messages.getString("SpecifyTarget"));
             return true;
@@ -58,7 +59,7 @@ public class HeadCommand implements TabExecutor {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull final CommandSender commandSender,
-        @NotNull final Command command, @NotNull final String s, @NotNull final String[] strings) {
+                                                @NotNull final Command command, @NotNull final String s, @NotNull final String[] strings) {
         Stream<String> stream = Bukkit.getOnlinePlayers().stream().map(Player::getName);
         if (strings.length > 0) {
             stream = stream.filter(string -> string.startsWith(strings[0]));

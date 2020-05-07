@@ -9,7 +9,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class EquipEvents implements Listener {
 
-    @EventHandler public void onInventoryClick(final InventoryClickEvent event) {
+    @EventHandler
+    public void onInventoryClick(final InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player)) {
             return;
         }

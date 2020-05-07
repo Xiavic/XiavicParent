@@ -22,7 +22,7 @@ public class RepairCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull final CommandSender sender, @NotNull final Command command,
-        @NotNull final String label, @NotNull final String[] args) {
+                             @NotNull final String label, @NotNull final String[] args) {
         if (!sender.hasPermission(permission)) {
             Utils.chat(sender, messages.getString("NoPerms"));
             return true;

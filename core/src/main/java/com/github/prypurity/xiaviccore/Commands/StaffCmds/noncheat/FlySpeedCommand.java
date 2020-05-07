@@ -7,8 +7,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
-//TODO: Refactor Utils
 public class FlySpeedCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -39,14 +37,18 @@ public class FlySpeedCommand implements CommandExecutor {
                             player.setFlySpeed((float) 0.9);
                         } else if (speed.equalsIgnoreCase("10")) {
                             player.setFlySpeed(1);
+                        } else {
+                            Utils.chat(player, Main.messages.getString("InvalidNumber"));
                         }
-                        player.sendMessage(Utils.chat(Main.messages.getString("FlySpeed").replace("%amount%", speed)));
+                        Utils.chat(player, Main.messages.getString("FlySpeed").replace("%amount%", speed));
                     } else {
-                        player.sendMessage(Utils.chat(Main.messages.getString("NoPerms")));
+                        Utils.chat(player, Main.messages.getString("NoPerms"));
                     }
                     return true;
                 }
             }
+        } else {
+            Utils.chat(sender, Main.messages.getString("SenderNotPlayer"));
         }
         return false;
     }

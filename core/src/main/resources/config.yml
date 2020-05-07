@@ -16,6 +16,7 @@
 ##############################
 ######## !! CONFIG !! ########
 ##############################
+Version: 1
 
 #Spawn | world name, X, Y, Z, Yaw, Pitch
 FirstSpawn: world,100,100,100,100
