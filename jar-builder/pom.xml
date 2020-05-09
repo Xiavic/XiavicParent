@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.github.prypurity</groupId>
-        <artifactId>xiaviccore-parent</artifactId>
+        <groupId>com.github.xiavic</groupId>
+        <artifactId>XiavicParent</artifactId>
         <version>1.0</version>
     </parent>
     <artifactId>xiaviccore-builder</artifactId>
@@ -47,18 +47,19 @@
                         <configuration>
                             <outputDirectory>${project.parent.build.directory}</outputDirectory>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <finalName>xiaviccore-${project.version}</finalName>
+                            <finalName>Xiavic-${project.version}</finalName>
                             <artifactSet>
                                 <excludes>
                                     <exclude>org.jetbrains:annotations</exclude>
                                     <exclude>org.json:json</exclude>
                                     <exclude>com.esotericsoftware.yamlbeans:yamlbeans</exclude>
+                                    <exclude>com.github.xiavic:XiavicLib</exclude>
                                 </excludes>
                             </artifactSet>
                             <relocations>
                                 <relocation>
                                     <pattern>de.leonhard.storage</pattern>
-                                    <shadedPattern>com.github.prypurity.xiaviccore.storage
+                                    <shadedPattern>com.github.xiavic.shaded.storage
                                     </shadedPattern>
                                 </relocation>
                             </relocations>
@@ -86,27 +87,27 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.prypurity</groupId>
-            <artifactId>core</artifactId>
+            <groupId>com.github.xiavic</groupId>
+            <artifactId>XiavicEssentials</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>com.github.prypurity</groupId>
+            <groupId>com.github.xiavic</groupId>
             <artifactId>xiavic-bukkit-1.15</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>com.github.prypurity</groupId>
+            <groupId>com.github.xiavic</groupId>
             <artifactId>xiavic-bukkit-1.14</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>com.github.prypurity</groupId>
+            <groupId>com.github.xiavic</groupId>
             <artifactId>xiavic-bukkit-1.13</artifactId>
             <version>1.0</version>
         </dependency>
         <dependency>
-            <groupId>com.github.prypurity</groupId>
+            <groupId>com.github.xiavic</groupId>
             <artifactId>xiavic-bukkit-1.13-legacy</artifactId>
             <version>1.0</version>
         </dependency>

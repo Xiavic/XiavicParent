@@ -5,20 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.xiavic</groupId>
-    <artifactId>XiavicParent</artifactId>
+    <artifactId>XiavicEssentials</artifactId>
     <version>1.0</version>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
-    <name>Xiavic-Parent</name>
-    <modules>
-        <module>jar-builder</module>
-        <module>XiavicLib</module>
-        <module>XiavicEssentials</module>
-        <module>nms/bukkit-1.15</module>
-        <module>nms/bukkit-1.14</module>
-        <module>nms/bukkit-1.13</module>
-        <module>nms/bukkit-1.13-legacy</module>
-    </modules>
+    <name>XiavicEssentials</name>
 
     <description>A</description>
     <properties>
@@ -30,6 +21,31 @@
     <build>
         <directory>maven/target</directory>
         <defaultGoal>clean package</defaultGoal>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <outputDirectory>${project.parent.build.directory}</outputDirectory>
+                </configuration>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
 
     <repositories>
@@ -58,6 +74,12 @@
             <groupId>com.github.JavaFactoryDev</groupId>
             <artifactId>LightningStorage</artifactId>
             <version>3.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.xiavic</groupId>
+            <artifactId>XiavicLib</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
