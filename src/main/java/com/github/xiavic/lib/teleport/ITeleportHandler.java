@@ -2,8 +2,6 @@ package com.github.xiavic.lib.teleport;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.entity.PlayerDeathEvent;
 
 public interface ITeleportHandler {
     void processPlayerTeleport(Player player);
