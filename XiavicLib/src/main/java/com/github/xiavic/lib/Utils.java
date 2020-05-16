@@ -18,6 +18,8 @@ public class Utils {
 
     //EZ Chat Colors
 
+    private static ITeleportHandler handler;
+
     public static String colorize(String s) {
         return ChatColor.translateAlternateColorCodes('&', s);
     }
@@ -65,8 +67,6 @@ public class Utils {
         final Server server = Bukkit.getServer();
         return server.getClass().getPackage().getName().replace("org.bukkit.craftbukkit", "");
     }
-
-    private static ITeleportHandler handler;
 
     @Deprecated
     public static void teleport(Player player, Location location) {

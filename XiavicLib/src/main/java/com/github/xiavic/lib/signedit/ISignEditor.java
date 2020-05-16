@@ -15,7 +15,8 @@ public interface ISignEditor extends Listener {
 
     void onRightClickSign(@NotNull PlayerInteractEvent event);
 
-    @NotNull Collection<UUID> getEditingPlayers();
+    @NotNull
+    Collection<UUID> getEditingPlayers();
 
     boolean isEditingSign(@NotNull UUID player);
 

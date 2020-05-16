@@ -19,11 +19,13 @@ public abstract class AbstractTeleportRequest {
 
     public abstract void sendRequest();
 
-    public @NotNull Player getOrigin() {
+    public @NotNull
+    Player getOrigin() {
         return this.origin;
     }
 
-    public @NotNull Player getTarget() {
+    public @NotNull
+    Player getTarget() {
         return this.target;
     }
 
