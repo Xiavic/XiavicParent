@@ -1,4 +1,4 @@
-package com.github.xiavic.lib.economy.api.banking;
+package com.github.xiavic.lib.economy.api;
 
 import org.jetbrains.annotations.NotNull;
 

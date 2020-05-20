@@ -1,6 +1,6 @@
-package com.github.xiavic.lib.economy.banking;
+package com.github.xiavic.lib.economy.impl;
 
-import com.github.xiavic.lib.economy.api.banking.Currency;
+import com.github.xiavic.lib.economy.api.Currency;
 import org.jetbrains.annotations.NotNull;
 
 /**
