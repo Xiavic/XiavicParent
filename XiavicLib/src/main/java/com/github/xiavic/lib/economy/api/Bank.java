@@ -1,4 +1,4 @@
-package com.github.xiavic.lib.economy.api.banking;
+package com.github.xiavic.lib.economy.api;
 
 import de.leonhard.storage.util.Valid;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +28,7 @@ public interface Bank extends ICreditService, TransactionExecutor {
 
     /**
      * Certain banks may not be able to create credit cards,
-     * such as the {@link com.github.xiavic.lib.economy.banking.Banks} CENTRAL bank.
+     * such as the {@link com.github.xiavic.lib.economy.impl.Banks} CENTRAL bank.
      *
      * @return Returns whether or not this bank supports
      * the creation of {@link CreditCard}s.

@@ -1,8 +1,9 @@
-package com.github.xiavic.lib.economy.banking;
+package com.github.xiavic.lib.economy.impl;
 
 import com.github.xiavic.lib.Utils;
-import com.github.xiavic.lib.economy.api.banking.Currency;
-import com.github.xiavic.lib.economy.api.banking.*;
+import com.github.xiavic.lib.economy.api.*;
+import com.github.xiavic.lib.economy.api.Currency;
+import com.github.xiavic.lib.economy.api.api.*;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
