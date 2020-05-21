@@ -1,9 +1,8 @@
 package com.github.xiavic.lib.economy.impl;
 
 import com.github.xiavic.lib.Utils;
-import com.github.xiavic.lib.economy.api.*;
 import com.github.xiavic.lib.economy.api.Currency;
-import com.github.xiavic.lib.economy.api.api.*;
+import com.github.xiavic.lib.economy.api.*;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,8 +16,7 @@ public enum Banks implements Bank {
      * Represents the instance of the central bank.
      */
     CENTRAL(Currencies.CENTRAL) {
-        @Override
-        @NotNull
+        @Override @NotNull
         public BankAccount createAccount(@NotNull final String name, @NotNull final UUID player) {
             final Banks banks = this;
             final int id = banks.getOrCreateIDFor(player);
@@ -33,7 +31,8 @@ public enum Banks implements Bank {
             return false;
         }
 
-        @Override @NotNull public CreditCard getOrCreateCardFor(@NotNull final String name, @NotNull final UUID owner)
+        @Override @NotNull
+        public CreditCard getOrCreateCardFor(@NotNull final String name, @NotNull final UUID owner)
             throws UnsupportedOperationException {
             throw new UnsupportedOperationException("Central Bank Cannot Create Credit Cards!");
         }
@@ -194,8 +193,9 @@ public enum Banks implements Bank {
         @NotNull private final Bank bank;
         private boolean enabled;
 
-        public CreditCardImpl(final @NotNull String name, final @NotNull Bank bank, final @NotNull UUID owner,
-            final int numericalID, final double interest, final @Nullable Supplier<ItemStack> toItem) {
+        public CreditCardImpl(final @NotNull String name, final @NotNull Bank bank,
+            final @NotNull UUID owner, final int numericalID, final double interest,
+            final @Nullable Supplier<ItemStack> toItem) {
             this.name = name;
             this.bank = bank;
             this.owner = owner;
@@ -237,7 +237,8 @@ public enum Banks implements Bank {
         }
 
         @Override @NotNull public Transaction createTransaction(@NotNull final UUID invoker,
-            @NotNull final CreditHolder invokingCreditHolder, @NotNull final CreditHolder targetCreditHolder) {
+            @NotNull final CreditHolder invokingCreditHolder,
+            @NotNull final CreditHolder targetCreditHolder) {
             return bank.createTransaction(invoker, invokingCreditHolder, targetCreditHolder);
         }
 

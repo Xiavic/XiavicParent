@@ -1,7 +1,5 @@
 package com.github.xiavic.lib.economy.api;
 
-import nl.kqcreations.cityrp.util.JsonSerializable;
-
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -10,7 +8,7 @@ import java.util.stream.Collectors;
  * Represents a data object used to keep track of a bunch of {@link BankAccount}s
  * Currently allows for any bank account to be stored with no restriction on the owners.
  */
-public class BankAccountData implements JsonSerializable {
+public class BankAccountData {
 
     public static final transient String DEFAULT = "MAIN";
     private Map<String, BankAccount> bankAccounts = new HashMap<>();
@@ -18,12 +16,9 @@ public class BankAccountData implements JsonSerializable {
     public BankAccountData() {
     }
 
-    public BankAccountData(String serial) {
-        this.bankAccounts = JsonSerializable.gson.fromJson(serial, BankAccountData.class).bankAccounts;
-    }
-
     public BankAccount getOrCreateMainAccount(UUID player, Bank bank) {
-        return bankAccounts.computeIfAbsent(DEFAULT, (unused) -> bank.createAccount(DEFAULT, player));
+        return bankAccounts
+            .computeIfAbsent(DEFAULT, (unused) -> bank.createAccount(DEFAULT, player));
     }
 
     public Collection<BankAccount> getAllAccounts() {
@@ -55,10 +50,6 @@ public class BankAccountData implements JsonSerializable {
         return getAccount(name, owner).isPresent();
     }
 
-    public String toJson() {
-        return JsonSerializable.gson.toJson(this);
-    }
-
     public BankAccountData merge(BankAccountData other) {
         BankAccountData data = new BankAccountData();
         data.bankAccounts.putAll(this.bankAccounts);
@@ -68,16 +59,16 @@ public class BankAccountData implements JsonSerializable {
         return data;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    @Override public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
         BankAccountData that = (BankAccountData) o;
         return Objects.equals(bankAccounts, that.bankAccounts);
     }
 
-    @Override
-    public int hashCode() {
+    @Override public int hashCode() {
         return bankAccounts != null ? bankAccounts.hashCode() : 0;
     }
 }
