@@ -7,9 +7,13 @@ import java.util.function.Supplier;
 
 public enum StorageType {
 
-    FLAT_YAML(), DISTRIBUTED_YAML(), SQL, MONGO_DB;
+    FLAT_YAML, DISTRIBUTED_YAML, SQL, MONGO_DB;
 
     private final Supplier<DataAccessObject> supplier;
+
+    StorageType() {
+        supplier = null;
+    }
 
     StorageType(@NotNull final Supplier<DataAccessObject> supplier) {
         this.supplier = supplier;
