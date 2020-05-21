@@ -1,7 +1,5 @@
 package com.github.xiavic.lib.economy.api;
 
-import nl.kqcreations.cityrp.api.banking.CreditHolder;
-
 import java.util.Map;
 import java.util.UUID;
 
@@ -10,8 +8,7 @@ import java.util.UUID;
  */
 public interface BankAccount extends CreditHolder {
 
-    @Override
-    Bank getBackingExecutor();
+    @Override Bank getBackingExecutor();
 
     /**
      * The creator of this account.
