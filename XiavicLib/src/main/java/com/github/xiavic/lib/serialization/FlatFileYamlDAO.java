@@ -9,57 +9,56 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.*;
 
-public class YamlDAO implements DataAccessObject {
+public class FlatFileYamlDAO implements DataAccessObject {
 
-    private final UUID uniqueID = UUID.randomUUID();
     @NotNull private final YamlConfiguration configuration;
     @NotNull private final Path file;
-    private final long maxFileSize;
-    private AtomicLong currentSize = new AtomicLong(0);
-    private YamlDAO temp;
 
-    public YamlDAO(@Nullable final YamlConfiguration configuration, @NotNull final Path file) {
+    public FlatFileYamlDAO(@NotNull final Path file) {
+        this.configuration = new YamlConfiguration();
+        this.file = file;
+        if (!loadFromDisk(file)) {
+            throw new IllegalStateException("Unable to load from disk!");
+        }
+    }
+
+    public FlatFileYamlDAO(@Nullable final YamlConfiguration configuration,
+        @NotNull final Path file) {
         this(configuration, file, -1);
     }
 
-    public YamlDAO(@Nullable final YamlConfiguration configuration, @NotNull final Path file,
-        final long maxSize) {
+    public FlatFileYamlDAO(@Nullable final YamlConfiguration configuration,
+        @NotNull final Path file, final long maxSize) {
         this.configuration = configuration == null ? new YamlConfiguration() : configuration;
         this.file = file;
-        this.maxFileSize = maxSize < -1 ? -1 : maxSize;
-        currentSize.getAndSet(this.configuration.saveToString().getBytes().length * Byte.SIZE);
-        this.temp = new YamlDAO(new File(file.toFile(), "temp_" + uniqueID.toString()), maxFileSize);
     }
 
-    private YamlDAO(final File file, long maxFileSize) {
-        this.file = Paths.get(file.getAbsolutePath());
-        this.maxFileSize = maxFileSize;
-        this.configuration = new YamlConfiguration();
+    @Override public @NotNull Path getBackingFile() {
+        return file;
     }
 
-    public long getEstimatedSize() {
-        return currentSize.get();
+    public YamlConfiguration getDataCopy() {
+        final String data;
+        synchronized (configuration) {
+            data = configuration.saveToString();
+        }
+        YamlConfiguration yaml = new YamlConfiguration();
+        try {
+            yaml.loadFromString(data);
+        } catch (InvalidConfigurationException ex) {
+            throw new IllegalStateException("Database corrupted!", ex);
+        }
+        return yaml;
     }
 
-    public boolean usesMultipleFiles() {
-        return maxFileSize != -1;
-    }
-
-    public long getMaxFileSize() {
-        return maxFileSize;
+    @Override public boolean containsKey(final String key) {
+        return configuration.contains(key);
     }
 
     @Override @NotNull public Path getFile() {
@@ -72,6 +71,7 @@ public class YamlDAO implements DataAccessObject {
                 configuration.load(file.toFile());
                 return true;
             } catch (final InvalidConfigurationException | IOException ex) {
+                ex.printStackTrace();
                 return false;
             }
         }
@@ -116,12 +116,67 @@ public class YamlDAO implements DataAccessObject {
         });
     }
 
+    @Override @Nullable public String getString(@NotNull final String key, final String def) {
+        return configuration.getString(key, def);
+    }
+
+    @Override public int getInt(@NotNull final String key, final int def) {
+        return configuration.getInt(key, def);
+    }
+
+    @Override public long getLong(@NotNull final String key, final long def) {
+        return configuration.getLong(key, def);
+    }
+
+    @Override public double getDouble(@NotNull final String key, final double def) {
+        return configuration.getDouble(key, def);
+    }
+
+    @Override public float getFloat(@NotNull final String key, final float def) {
+        return (float) configuration.getDouble(key, def);
+    }
+
+    @Override public @NotNull Set<String> keySet() {
+        synchronized (configuration) {
+            return configuration.getKeys(false);
+        }
+    }
+
+    @Override public @NotNull Collection<Object> values(@NotNull final String key) {
+        ConfigurationSection section = configuration.getConfigurationSection(key);
+        if (section == null) {
+            return new HashSet<>();
+        }
+        return section.getValues(false).values();
+    }
+
     @Override
     public void save(@NotNull final String key, @Nullable final ConfigurationSerializable object) {
         synchronized (configuration) {
             configuration.set(key, object);
         }
-        Bukkit.getScheduler().runTaskAsynchronously(XiavicLib.getPlugin(XiavicLib.class), this::writeToDisk);
+        Bukkit.getScheduler()
+            .runTaskAsynchronously(XiavicLib.getPlugin(XiavicLib.class), this::writeToDisk);
+    }
+
+    @Override public void save(@NotNull final String key, final int value) {
+        configuration.set(key, value);
+    }
+
+    @Override public void save(@NotNull final String key, final long value) {
+        configuration.set(key, value);
+    }
+
+    @Override public void save(@NotNull final String key, final double value) {
+        configuration.set(key, value);
+    }
+
+    @Override public void save(@NotNull final String key, final float value) {
+        configuration.set(key, value);
+    }
+
+    @Override public void save(@NotNull final String key, @Nullable final String value) {
+        configuration.set(key, value);
     }
 
     public static void loadMapFromSection(@Nullable final ConfigurationSection section,
