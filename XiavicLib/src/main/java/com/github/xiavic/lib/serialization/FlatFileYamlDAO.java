@@ -9,12 +9,20 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 
+/**
+ * Represents a single-file database implementation using {@link YamlConfiguration} as
+ * the base accessor.
+ * This implementation should generally be avoided as the entire database will
+ * be loaded into memory.
+ */
 public class FlatFileYamlDAO implements DataAccessObject {
 
     @NotNull private final YamlConfiguration configuration;
@@ -29,18 +37,41 @@ public class FlatFileYamlDAO implements DataAccessObject {
     }
 
     public FlatFileYamlDAO(@Nullable final YamlConfiguration configuration,
-        @NotNull final Path file) {
-        this(configuration, file, -1);
-    }
-
-    public FlatFileYamlDAO(@Nullable final YamlConfiguration configuration,
-        @NotNull final Path file, final long maxSize) {
+        @NotNull final Path file) throws IllegalStateException {
+        if (!Files.isRegularFile(file)) {
+            try {
+                Files.createFile(file);
+            } catch (IOException ex) {
+                throw new IllegalStateException("Unable to create the database!");
+            }
+        }
         this.configuration = configuration == null ? new YamlConfiguration() : configuration;
         this.file = file;
     }
 
+    //TODO may not work!
+    public static void loadMapFromSection(@Nullable final ConfigurationSection section,
+        @NotNull Map<String, Object> existing) {
+        if (section == null) {
+            return;
+        }
+        for (final String key : section.getKeys(false)) {
+            if (!section.isConfigurationSection(key)) {
+                Map<String, Object> map = new HashMap<>();
+                loadMapFromSection(section.getConfigurationSection(key), map);
+                existing.put(key, map);
+            } else {
+                loadMapFromSection(section.getConfigurationSection(key), existing);
+            }
+        }
+    }
+
     @Override public @NotNull Path getBackingFile() {
         return file;
+    }
+
+    public long getEstimatedSize() {
+        return configuration.saveToString().getBytes().length * Byte.SIZE;
     }
 
     public YamlConfiguration getDataCopy() {
@@ -61,13 +92,14 @@ public class FlatFileYamlDAO implements DataAccessObject {
         return configuration.contains(key);
     }
 
-    @Override @NotNull public Path getFile() {
-        return file;
-    }
-
     @Override public boolean loadFromDisk(@NotNull final Path file) {
         synchronized (configuration) {
             try {
+                File asFile = file.toFile();
+                if (asFile.getTotalSpace() >= Runtime.getRuntime().freeMemory()) {
+                    throw new IllegalStateException(
+                        "Unable to load database into memory, not enough memory!");
+                }
                 configuration.load(file.toFile());
                 return true;
             } catch (final InvalidConfigurationException | IOException ex) {
@@ -89,9 +121,12 @@ public class FlatFileYamlDAO implements DataAccessObject {
         }
     }
 
-    @Override @NotNull
-    public <T extends ConfigurationSerializable> Optional<T> get(@NotNull final String key,
-        @NotNull final Class<T> def) {
+    @Override @Nullable public Object getObject(@NotNull final String key) {
+        return configuration.get(key);
+    }
+
+    @Override @NotNull public <T extends ConfigurationSerializable> Optional<T> getSerializable(
+        @NotNull final String key, @NotNull final Class<T> def) {
         return getRaw(key).map((Map<String, Object> result) -> {
             try {
                 final Constructor<T> constructor = def.getDeclaredConstructor(Map.class);
@@ -142,7 +177,7 @@ public class FlatFileYamlDAO implements DataAccessObject {
         }
     }
 
-    @Override public @NotNull Collection<Object> values(@NotNull final String key) {
+    @Override @NotNull public Collection<?> values(@NotNull final String key) {
         ConfigurationSection section = configuration.getConfigurationSection(key);
         if (section == null) {
             return new HashSet<>();
@@ -150,8 +185,7 @@ public class FlatFileYamlDAO implements DataAccessObject {
         return section.getValues(false).values();
     }
 
-    @Override
-    public void save(@NotNull final String key, @Nullable final ConfigurationSerializable object) {
+    @Override public void save(@NotNull final String key, @Nullable final Object object) {
         synchronized (configuration) {
             configuration.set(key, object);
         }
@@ -159,50 +193,34 @@ public class FlatFileYamlDAO implements DataAccessObject {
             .runTaskAsynchronously(XiavicLib.getPlugin(XiavicLib.class), this::writeToDisk);
     }
 
-    @Override public void save(@NotNull final String key, final int value) {
-        configuration.set(key, value);
-    }
-
-    @Override public void save(@NotNull final String key, final long value) {
-        configuration.set(key, value);
-    }
-
-    @Override public void save(@NotNull final String key, final double value) {
-        configuration.set(key, value);
-    }
-
-    @Override public void save(@NotNull final String key, final float value) {
-        configuration.set(key, value);
-    }
-
-    @Override public void save(@NotNull final String key, @Nullable final String value) {
-        configuration.set(key, value);
-    }
-
-    public static void loadMapFromSection(@Nullable final ConfigurationSection section,
-        @NotNull Map<String, Object> existing) {
-        if (section == null) {
-            return;
-        }
-        for (final String key : section.getKeys(false)) {
-            if (!section.isConfigurationSection(key)) {
-                Map<String, Object> map = new HashMap<>();
-                loadMapFromSection(section.getConfigurationSection(key), map);
-                existing.put(key, map);
-            } else {
-                loadMapFromSection(section.getConfigurationSection(key), existing);
-            }
-        }
-    }
-
     @Override public boolean writeToDisk() {
         synchronized (configuration) {
             try {
                 configuration.save(file.toFile());
             } catch (final IOException ex) {
+                ex.printStackTrace();
                 return false;
             }
             return true;
         }
+    }
+
+    @Override public boolean equals(final Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        FlatFileYamlDAO dao = (FlatFileYamlDAO) o;
+
+        if (!configuration.equals(dao.configuration))
+            return false;
+        return file.equals(dao.file);
+    }
+
+    @Override public int hashCode() {
+        int result = configuration.hashCode();
+        result = 31 * result + file.hashCode();
+        return result;
     }
 }
