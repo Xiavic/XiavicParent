@@ -56,12 +56,12 @@ public class FlatFileYamlDAO implements DataAccessObject {
             return;
         }
         for (final String key : section.getKeys(false)) {
-            if (!section.isConfigurationSection(key)) {
+            if (section.isConfigurationSection(key)) {
                 Map<String, Object> map = new HashMap<>();
                 loadMapFromSection(section.getConfigurationSection(key), map);
                 existing.put(key, map);
             } else {
-                loadMapFromSection(section.getConfigurationSection(key), existing);
+                existing.put(key, section.get(key));
             }
         }
     }
