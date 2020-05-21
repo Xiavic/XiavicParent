@@ -17,8 +17,6 @@ import com.github.xiavic.essentials.Commands.UserCmds.Essential.Teleport.Tpa.Tpd
 import com.github.xiavic.essentials.Commands.UserCmds.Fun.*;
 import com.github.xiavic.essentials.Commands.UserCmds.Fun.Links.*;
 import com.github.xiavic.essentials.Utils.EquipAnything.EquipEvents;
-import com.github.xiavic.essentials.Utils.Files.Messages;
-import com.github.xiavic.essentials.Utils.Files.Permissions;
 import com.github.xiavic.essentials.Utils.Listeners.AFKHandler;
 import com.github.xiavic.essentials.Utils.Listeners.JoinQuit;
 import com.github.xiavic.essentials.Utils.Listeners.RespawnEvent;
@@ -71,9 +69,9 @@ public final class Main extends JavaPlugin {
         // loadshit();
 
         Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage(" XIAVIC CORE IS ACTIVATED... ");
+        Bukkit.getConsoleSender().sendMessage(" XIAVIC ESSENTIALS IS ACTIVATED... ");
         Bukkit.getConsoleSender().sendMessage(" ");
-        Bukkit.getConsoleSender().sendMessage("Xiavic Network's Amazing Core");
+        Bukkit.getConsoleSender().sendMessage("Xiavic Network's Amazing Essentials");
         Bukkit.getConsoleSender().sendMessage("     In Development by the Xiavic Dev Team ");
         Bukkit.getConsoleSender().sendMessage(" ");
         registerShit();
@@ -108,6 +106,7 @@ public final class Main extends JavaPlugin {
         getCommand("fly").setExecutor(new FlyCommand());
         getCommand("flyspeed").setExecutor(new FlySpeedCommand());
         getCommand("forums").setExecutor(new ForumsCommand());
+        getCommand("freeze").setExecutor(new FreezeCommand());
         getCommand("gamemode").setExecutor(new GamemodeCommand());
         getCommand("god").setExecutor(new GodCommand());
         getCommand("grindstone").setExecutor(new GrindstoneCommand());
@@ -145,7 +144,7 @@ public final class Main extends JavaPlugin {
         getCommand("world").setExecutor(new WorldCommand());
         getCommand("workbench").setExecutor(new WorkbenchCommand());
         getCommand("youtube").setExecutor(new YoutubeCommand());
-        //getCommand("hat").setExecutor(new HatCommand());
+        getCommand("hat").setExecutor(new HatCommand());
     }
 
     private void registerListeners() {
@@ -253,8 +252,6 @@ public final class Main extends JavaPlugin {
         saveResource("Resources/messages.yml", false);
         //saveResource("Resources/commands.yml", false);
         saveResource("config.yml", false);
-        Permissions.setup();
-        Messages.setup();
     }
 
     // I am using this function for updating the configs from the files inside the current
@@ -266,8 +263,6 @@ public final class Main extends JavaPlugin {
         saveResource("Resources/messages.yml", true);
         //saveResource("Resources/commands.yml", true);
         saveResource("config.yml", true);
-        Permissions.setup();
-        Messages.setup();
         mainConfig.set("FirstSpawn", firstspawnLocation);
         mainConfig.set("Spawn", spawnLocation);
         saveConfig();
