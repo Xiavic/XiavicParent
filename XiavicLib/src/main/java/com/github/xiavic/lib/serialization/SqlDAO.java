@@ -48,11 +48,12 @@ public class SqlDAO implements DataAccessObject{
             if (row == null) {
                 return Optional.empty();
             }
-            row.key
+            //row.key
         } catch (SQLException ex) {
             ex.printStackTrace();
             return Optional.empty();
         }
+        throw new UnsupportedOperationException();
     }
 
     @Override public @Nullable Object getObject(@NotNull final String key) {
