@@ -1,7 +1,7 @@
 package com.github.xiavic.essentials.Commands.player.Essential;
 
 import com.github.xiavic.essentials.Main;
-import com.github.xiavic.essentials.Utils.Utils;
+import com.github.xiavic.essentials.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

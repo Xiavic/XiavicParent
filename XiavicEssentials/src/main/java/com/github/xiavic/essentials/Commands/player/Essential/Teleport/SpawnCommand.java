@@ -1,8 +1,8 @@
 package com.github.xiavic.essentials.Commands.player.Essential.Teleport;
 
 import com.github.xiavic.essentials.Main;
-import com.github.xiavic.essentials.Utils.LocationUtils;
-import com.github.xiavic.essentials.Utils.Utils;
+import com.github.xiavic.essentials.utils.LocationUtils;
+import com.github.xiavic.essentials.utils.Utils;
 import com.github.xiavic.lib.teleport.ITeleportHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

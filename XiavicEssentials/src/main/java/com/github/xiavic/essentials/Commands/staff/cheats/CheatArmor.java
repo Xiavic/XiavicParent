@@ -1,7 +1,7 @@
 package com.github.xiavic.essentials.Commands.staff.cheats;
 
 import com.github.xiavic.essentials.Main;
-import com.github.xiavic.essentials.Utils.Utils;
+import com.github.xiavic.essentials.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

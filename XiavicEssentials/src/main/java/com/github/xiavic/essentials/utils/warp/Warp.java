@@ -1,4 +1,4 @@
-package com.github.xiavic.essentials.Utils.warp;
+package com.github.xiavic.essentials.utils.warp;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;

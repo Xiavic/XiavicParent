@@ -1,9 +1,9 @@
 package com.github.xiavic.essentials.Commands.player.Fun;
 
-import com.github.xiavic.essentials.Utils.Utils;
-import com.github.xiavic.essentials.Utils.warp.PrivateWarp;
-import com.github.xiavic.essentials.Utils.warp.PrivateWarpManager;
-import com.github.xiavic.essentials.Utils.warp.Warp;
+import com.github.xiavic.essentials.utils.Utils;
+import com.github.xiavic.essentials.utils.warp.PrivateWarp;
+import com.github.xiavic.essentials.utils.warp.PrivateWarpManager;
+import com.github.xiavic.essentials.utils.warp.Warp;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;

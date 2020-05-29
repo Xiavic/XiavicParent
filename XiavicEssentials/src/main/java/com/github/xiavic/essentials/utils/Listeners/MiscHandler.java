@@ -1,4 +1,4 @@
-package com.github.xiavic.essentials.Utils.Listeners;
+package com.github.xiavic.essentials.utils.Listeners;
 
 import com.github.xiavic.lib.Utils;
 import org.bukkit.event.EventHandler;

@@ -1,6 +1,6 @@
-package com.github.xiavic.essentials.Utils.Listeners;
+package com.github.xiavic.essentials.utils.Listeners;
 
-import com.github.xiavic.essentials.Utils.LocationUtils;
+import com.github.xiavic.essentials.utils.LocationUtils;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerRespawnEvent;

@@ -2,14 +2,14 @@ package com.github.xiavic.essentials;
 
 // import com.github.xiavic.essentials.Utils.Misc.Databases;
 
-import com.github.xiavic.essentials.Utils.EquipAnything.EquipEvents;
-import com.github.xiavic.essentials.Utils.Listeners.*;
-import com.github.xiavic.essentials.Utils.Listeners.AFKHandler;
-import com.github.xiavic.essentials.Utils.Listeners.JoinQuit;
-import com.github.xiavic.essentials.Utils.Listeners.RespawnEvent;
-import com.github.xiavic.essentials.Utils.Listeners.TeleportHandler;
-import com.github.xiavic.essentials.Utils.Tpa.TpaHandler;
-import com.github.xiavic.essentials.Utils.Utils;
+import com.github.xiavic.essentials.utils.EquipAnything.EquipEvents;
+import com.github.xiavic.essentials.utils.Listeners.*;
+import com.github.xiavic.essentials.utils.Listeners.AFKHandler;
+import com.github.xiavic.essentials.utils.Listeners.JoinQuit;
+import com.github.xiavic.essentials.utils.Listeners.RespawnEvent;
+import com.github.xiavic.essentials.utils.Listeners.TeleportHandler;
+import com.github.xiavic.essentials.utils.Tpa.TpaHandler;
+import com.github.xiavic.essentials.utils.Utils;
 import com.github.xiavic.essentials.Commands.player.Essential.*;
 import com.github.xiavic.essentials.Commands.player.Essential.Teleport.BackCommand;
 import com.github.xiavic.essentials.Commands.player.Essential.Teleport.RandomTPCommand;

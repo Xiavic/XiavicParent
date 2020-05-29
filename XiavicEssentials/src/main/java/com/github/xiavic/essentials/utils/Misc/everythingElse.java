@@ -1,4 +1,4 @@
-package com.github.xiavic.essentials.Utils.Misc;
+package com.github.xiavic.essentials.utils.Misc;
 
 import org.bukkit.entity.Player;
 

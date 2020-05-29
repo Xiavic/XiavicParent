@@ -1,4 +1,4 @@
-package com.github.xiavic.essentials.Utils;
+package com.github.xiavic.essentials.utils;
 
 import com.github.xiavic.essentials.Main;
 import org.bukkit.Bukkit;

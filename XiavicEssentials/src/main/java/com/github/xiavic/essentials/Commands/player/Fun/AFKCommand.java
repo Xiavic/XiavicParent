@@ -1,8 +1,8 @@
 package com.github.xiavic.essentials.Commands.player.Fun;
 
 import com.github.xiavic.essentials.Main;
-import com.github.xiavic.essentials.Utils.Listeners.AFKHandler;
-import com.github.xiavic.essentials.Utils.Utils;
+import com.github.xiavic.essentials.utils.Listeners.AFKHandler;
+import com.github.xiavic.essentials.utils.Utils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

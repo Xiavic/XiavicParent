@@ -1,7 +1,7 @@
 package com.github.xiavic.essentials.Commands.staff.noncheat;
 
 import com.github.xiavic.essentials.Main;
-import com.github.xiavic.essentials.Utils.Utils;
+import com.github.xiavic.essentials.utils.Utils;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;

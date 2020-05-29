@@ -1,7 +1,7 @@
 package com.github.xiavic.essentials.Commands.player.Essential;
 
 import com.github.xiavic.essentials.Main;
-import com.github.xiavic.essentials.Utils.Utils;
+import com.github.xiavic.essentials.utils.Utils;
 import com.github.xiavic.lib.signedit.ISignEditor;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;

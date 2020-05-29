@@ -1,8 +1,8 @@
 package com.github.xiavic.essentials.Commands.player.Fun;
 
-import com.github.xiavic.essentials.Utils.Utils;
-import com.github.xiavic.essentials.Utils.warp.Warp;
-import com.github.xiavic.essentials.Utils.warp.WarpManager;
+import com.github.xiavic.essentials.utils.Utils;
+import com.github.xiavic.essentials.utils.warp.Warp;
+import com.github.xiavic.essentials.utils.warp.WarpManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;

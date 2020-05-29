@@ -1,7 +1,7 @@
-package com.github.xiavic.essentials.Utils.Tpa;
+package com.github.xiavic.essentials.utils.Tpa;
 
 import com.github.xiavic.essentials.Main;
-import com.github.xiavic.essentials.Utils.Utils;
+import com.github.xiavic.essentials.utils.Utils;
 import com.github.xiavic.lib.teleport.ITeleportHandler;
 import com.github.xiavic.lib.teleport.ITeleportRequestHandler;
 import org.bukkit.Bukkit;

@@ -1,4 +1,4 @@
-package com.github.xiavic.essentials.Utils.inventory;
+package com.github.xiavic.essentials.utils.inventory;
 
 import com.github.xiavic.lib.inventory.InventorySerializer;
 import com.github.xiavic.lib.serialization.DataAccessObject;

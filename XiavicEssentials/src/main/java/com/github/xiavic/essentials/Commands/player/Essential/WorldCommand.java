@@ -1,6 +1,6 @@
 package com.github.xiavic.essentials.Commands.player.Essential;
 
-import com.github.xiavic.essentials.Utils.Utils;
+import com.github.xiavic.essentials.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;

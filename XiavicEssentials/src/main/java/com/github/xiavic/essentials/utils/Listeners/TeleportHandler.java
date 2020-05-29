@@ -1,7 +1,7 @@
-package com.github.xiavic.essentials.Utils.Listeners;
+package com.github.xiavic.essentials.utils.Listeners;
 
 import com.github.xiavic.essentials.Main;
-import com.github.xiavic.essentials.Utils.Utils;
+import com.github.xiavic.essentials.utils.Utils;
 import com.github.xiavic.lib.teleport.ITeleportHandler;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

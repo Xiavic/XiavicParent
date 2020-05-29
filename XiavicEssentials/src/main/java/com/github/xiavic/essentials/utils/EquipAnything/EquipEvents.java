@@ -1,4 +1,4 @@
-package com.github.xiavic.essentials.Utils.EquipAnything;
+package com.github.xiavic.essentials.utils.EquipAnything;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
