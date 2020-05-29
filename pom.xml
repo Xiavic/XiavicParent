@@ -5,7 +5,6 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.xiavic</groupId>
-<<<<<<< HEAD
     <artifactId>XiavicParent</artifactId>
     <version>1.0</version>
     <packaging>pom</packaging>
@@ -19,11 +18,6 @@
         <module>nms/bukkit-1.15</module>
         <module>nms/bukkit-1.14</module>
     </modules>
-=======
-    <artifactId>XiavicLib</artifactId>
-    <version>1.1</version>
-    <modelVersion>4.0.0</modelVersion>
->>>>>>> d7cfeae... Add a new NMSVersion class, bump version number
 
     <description>A</description>
     <properties>
@@ -35,57 +29,6 @@
     <build>
         <directory>maven/target</directory>
         <defaultGoal>clean package</defaultGoal>
-<<<<<<< HEAD
-    </build>
-
-=======
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
-                <configuration>
-                    <outputDirectory>${project.parent.build.directory}</outputDirectory>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>2.4.1</version>
-                <configuration>
-                    <relocations>
-                        <relocation>
-                            <pattern>co.aikar.idb</pattern>
-                            <shadedPattern>com.github.xiavic.lib.idb</shadedPattern>
-                        </relocation>
-                    </relocations>
-                    <outputDirectory>${project.parent.build.directory}</outputDirectory>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
     </build>
 
     <repositories>
@@ -135,6 +78,4 @@
             <version>2.4.1</version>
         </dependency>
     </dependencies>
-
->>>>>>> b3394f3... Update database access, add an InventoryManager
 </project>
