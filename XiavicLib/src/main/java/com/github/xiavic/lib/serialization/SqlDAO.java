@@ -53,7 +53,7 @@ public class SqlDAO implements DataAccessObject{
             ex.printStackTrace();
             return Optional.empty();
         }
-        return Optional.empty();
+        throw new UnsupportedOperationException();
     }
 
     @Override public @Nullable Object getObject(@NotNull final String key) {
