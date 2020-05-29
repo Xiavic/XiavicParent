@@ -190,18 +190,21 @@ public class DistributedYamlDAO implements DataAccessObject {
      */
     private FlatFileYamlDAO newTempFragment() throws IOException {
         final String indexName = index.getBackingFile().toFile().getName().split("\\.")[0];
-        return new FlatFileYamlDAO(new YamlConfiguration(), Files.createTempFile(indexName, ".temp"));
+        return new FlatFileYamlDAO(new YamlConfiguration(),
+            Files.createTempFile(indexName, ".temp"));
     }
 
-    private FlatFileYamlDAO newFragment() throws IOException{
+    private FlatFileYamlDAO newFragment() throws IOException {
         final String indexName = index.getBackingFile().toFile().getName().split("\\.")[0];
-        Path file = Paths.get(new File(index.getBackingFile().toFile(), indexName + "_" + UUID.randomUUID().toString() + ".yml").getAbsolutePath());
+        Path file = Paths.get(new File(index.getBackingFile().toFile(),
+            indexName + "_" + UUID.randomUUID().toString() + ".yml").getAbsolutePath());
         return new FlatFileYamlDAO(new YamlConfiguration(), Files.createFile(file));
     }
 
     public void registerFragment(FlatFileYamlDAO fragment) {
         if (!fragmentIndex.contains(fragment.getBackingFile())) {
-            fragment.save(UUID.randomUUID().toString(), fragment.getBackingFile().toFile().getAbsolutePath());
+            fragment.save(UUID.randomUUID().toString(),
+                fragment.getBackingFile().toFile().getAbsolutePath());
             buildFragmentIndex();
         }
     }
@@ -223,7 +226,9 @@ public class DistributedYamlDAO implements DataAccessObject {
         }
         if (tempSize >= syncThreshold) {
             //Let this method finish, give ~ 25ms (or 5 ticks) since this method may be called async.
-            Bukkit.getScheduler().runTaskLaterAsynchronously(XiavicLib.getPlugin(XiavicLib.class), this::writeToDisk, 5);
+            Bukkit.getScheduler()
+                .runTaskLaterAsynchronously(XiavicLib.getPlugin(XiavicLib.class), this::writeToDisk,
+                    5);
         }
         for (FlatFileYamlDAO fileYamlDAO : temp) {
             if (fileYamlDAO.getEstimatedSize() + estimatedSize < maxFileSize) {
@@ -326,6 +331,10 @@ public class DistributedYamlDAO implements DataAccessObject {
         return resolveKey(key).map(dao -> dao.getString(key, def)).orElse(def);
     }
 
+    @Override public @NotNull byte[] getByteArray(@NotNull final String key) {
+        return resolveKey(key).map(dao -> dao.getByteArray(key)).orElse(new byte[0]);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -386,9 +395,7 @@ public class DistributedYamlDAO implements DataAccessObject {
                 throw new IllegalArgumentException("Invalid Index file!");
             }
             this.uniqueID = UUID.fromString(uniqueID);
-            this.temp.clear();
-            this.fragmentIndex.clear();
-            this.cached.clear();
+            close();
             this.index = dao;
             buildFragmentIndex();
             return true;
@@ -396,6 +403,13 @@ public class DistributedYamlDAO implements DataAccessObject {
             unknown.printStackTrace();
             return false;
         }
+    }
+
+    @Override public void close() {
+        writeToDisk();
+        cached.clear();
+        temp.clear();
+        fragmentIndex.clear();;
     }
 
     @Override public boolean equals(final Object o) {
