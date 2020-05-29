@@ -1,6 +1,8 @@
 package com.github.xiavic.lib.serialization;
 
 import com.github.xiavic.lib.XiavicLib;
+import de.leonhard.storage.Yaml;
+import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -24,6 +26,8 @@ import java.util.*;
  * be loaded into memory.
  */
 public class FlatFileYamlDAO implements DataAccessObject {
+
+    public static final YamlConfiguration EMPTY = new YamlConfiguration();
 
     @NotNull private final YamlConfiguration configuration;
     @NotNull private final Path file;
@@ -171,6 +175,10 @@ public class FlatFileYamlDAO implements DataAccessObject {
         return (float) configuration.getDouble(key, def);
     }
 
+    @Override @NotNull public byte[] getByteArray(@NotNull final String key) {
+        return ArrayUtils.toPrimitive(configuration.getByteList(key).toArray(new Byte[0]));
+    }
+
     @Override public @NotNull Set<String> keySet() {
         synchronized (configuration) {
             return configuration.getKeys(false);
@@ -202,6 +210,19 @@ public class FlatFileYamlDAO implements DataAccessObject {
                 return false;
             }
             return true;
+        }
+    }
+
+    @Override public void close() {
+        writeToDisk();
+        synchronized (configuration) {
+            synchronized (EMPTY) {
+                try {
+                    configuration.loadFromString(EMPTY.saveToString());
+                } catch (InvalidConfigurationException ex) {
+                    throw new IllegalStateException(ex);
+                }
+            }
         }
     }
 
