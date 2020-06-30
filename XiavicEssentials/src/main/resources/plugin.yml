@@ -1,0 +1,188 @@
+name: XiavicEssentials
+version: 1.0.0
+main: com.github.xiavic.essentials.Main
+api-version: 1.13
+prefix: XiavicEssentials
+authors: [Imhandmade, Kerlab, Andrewandy, NightPotato]
+depend: [XiavicLib]
+description: Yes
+commands:
+  afk:
+    usage: /afk
+    description: Set yourself to afk!
+  clear:
+    usage: /clear | (player)
+    description: Clear everything BUT the equipped armor!
+  clearall:
+    usage: /clearall | (player)
+    description: Clear the whole inventory.
+  ec:
+    usage: /ec | (player)
+    description: Open the enderchest.
+  feed:
+    usage: /feed | (player/all)
+    description: Feed yourself, or another player.
+  heal:
+    usage: /heal | (player/all)
+    description: Heal back to full health, and remove harmful effects.
+  gamemode:
+    usage: /gamemode | <Survival[s,0]/Creative[c,1]/Adventure[a,2]/Spectator[sp,3]> (player)
+    description: Change the gamemode of yourself or another player.
+    aliases: gm
+  setspawn:
+    usage: /setspawn
+    description: Set the default world spawn.
+  spawn:
+    usage: /spawn (player)
+    description: Teleport back to spawn.
+  signedit:
+    usage: /signedit <1/2/3/4/on/off> (Text)
+    description: Toggle signedit, or select a line.
+  tpa:
+    usage: /tpa <player>
+    description: Send a teleport Request.
+  tpaccept:
+    usage: /tpaccept
+    description: Accept a pending teleport request.
+  tpdeny:
+    usage: /tpdeny
+    description: Deny a pending teleport request.
+  rtp:
+    usage: /rtp
+    description: Randomly teleports you within a defined area.
+  argh:
+    usage: /argh
+    description: Piratey Treasure.
+  cheatexp:
+    usage: /cheatexp
+    description: Cheater Cheater, pumpkin eater!
+  walkspeed:
+    usage: /walkspeed <0-10>
+    description: Adjust your walkspeed.
+  flyspeed:
+    usage: /flyspeed <0-10>
+    description: Adjust your flyspeed.
+  dispose:
+    usage: /dispose
+    description: Throw away your useless junk.
+    aliases: trash
+  whois:
+    usage: /whois <player>
+    description: Depending on perms, you will only see the name & nickname.
+  warp:
+    usage: /warp <warpName/info> (player | <warpName>)
+    description: Teleport to a desired warp location.
+  warpedit:
+    usage: /warpedit <create/delete/toggle/permission> <name> <null | null | set/reset> <permission>
+    description: Create, edit, toggle, or change premissions to a warp.
+  privatewarp:
+    usage: /privatewarp <warpName/info> <playerName | warpName> <player>
+    description: Create, remove, edit, toggle or whitelist private warps.
+    aliases: pw
+  cheatarmor:
+    usage: /cheatarmor
+    description: Give yourself maxed out vanilla enchanted armor.
+  coreconfigupdate:
+    usage: /ccu
+    description: Update all configs to latest versions.
+    aliases: ccu
+  tp:
+    usage: /tp <player> (player)
+    description: Teleport a player to another.
+  tphere:
+    usage: /tphere <player>
+    description: Force a player to teleport to you.
+  ext:
+    usage: /ext (player)
+    description: Remove active fire ticks.
+    aliases: extinguish
+  info:
+    usage: /iteminfo
+    description: Check an item's info.
+    aliases: iteminfo
+  sudo:
+    usage: /sudo <player> <"s:" | "c:">
+    description: Sudo another player to say something or use a command.
+  coreversion:
+    usage: /cv
+    description: Get the version of the Xiavic Essentials running.
+    aliases: cv
+  fly:
+    usage: /fly (player)
+    description: Toggle fly mode.
+  top:
+    usage: /top
+    description: Teleport to the highest Y-block of your location.
+  pony:
+    usage: /pony
+    description: Do not ask.
+  near:
+    usage: /near
+    description: Find the players near you.
+  forums:
+    usage: /forums
+    description: Grab the forums link.
+  twitter:
+    usage: /twitter
+    description: Grab the twitter link.
+  website:
+    usage: /website
+    description: Grab the website link.
+  youtube:
+    usage: /youtube
+    description: Grab the youtube link.
+  discord:
+    usage: /discord
+    description: Grab the discord link.
+  god:
+    usage: /god (player)
+    description: Toggle god mode.
+  back:
+    usage: /back
+    description: Teleport to your last location.
+  suicide:
+    usage: /suicide
+    description: Allow yourself to be reborn
+  tppos:
+    usage: /tppos <X,Y,Z>
+    description: Teleport to specific coordinates
+  setfirstspawn:
+    usage: /setfirstspawn
+    description: Set the first spawn for new players that join will first be located.
+  tpall:
+    usage: /tpall
+    description: Teleport all online players to your location.
+  more:
+    usage: /more
+    description: Change the item in your hand to a max of that stack.
+  workbench:
+    usage: /wb
+    description: Open a craftingbench.
+    aliases: [wb, craftingtable]
+  world:
+    usage: /world <world>
+    description: Easily change between worlds.
+  loom:
+    usage: /loom
+    description: Open a loom.
+  cartography:
+    usage: /cartography
+    description: Open a cartography table.
+  stonecutter:
+    usage: /stonecutter
+    description: Open a stonecutter.
+  grindstone:
+    usage: /grindstone
+    description: Open a grindstone.
+  head:
+    usage: /head <OnlinePlayer>
+    description: Grab the head of an online player.
+  repair:
+    usage: /repair
+    description: Repair the item you are holding.
+  freeze:
+    usage: /freeze <player>
+    description: Freeze a player in place.
+  hat:
+    usage: /hat
+    description: Make the item you are holding in your hand to be your new hat.

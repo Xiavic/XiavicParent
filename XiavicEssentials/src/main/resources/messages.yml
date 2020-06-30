@@ -1,0 +1,169 @@
+###________________########
+##/////////\\\\\\\\\########
+#//////////\\\\\\\\\\#######
+#//// Xiavic Core \\\\######
+#\\\\\ Plugin 2.0 ////######
+#\\\\\\\\\\//////////#######
+##\\\\\\\\\/////////########
+###\\\\\\\\////////#########
+####\\\\\\\///////##########
+#####\\\\\\//////###########
+######\\\\\/////############
+#######\\\\////#############
+#######\\_|_//##############
+
+
+##############################
+####### !! MESSAGES !! #######
+##############################
+Version: 1
+
+# Economy
+Account: "&2Your account balance is currently &e%money%."
+EcoAdd: "&2You have had %amount% added to your account."
+EcoPay: "&2You have paid %amount% to %target%"
+EcoRemove: "&2You have had %amount% removed from your account."
+EcoReset: "&2&lYour balance has been reset!"
+EcoSet: "&2Your balance was set to, %amount%"
+EcoTop:
+  1: "&2Top 5 Players:"
+  2: "&1First: %player1%"
+  3: "&1Second: %player2%"
+  4: "&1Third: %player3%"
+  5: "&1Fourth: %player4%"
+  6: "&1Fifth: %player5%"
+
+# Common
+InvalidArgs: "&cInvalid Arguments: %reason%"
+PlayerNotFound: "&cThat Player is not found or is not online!"
+PlayerNotFound2: "&cOne of the players are not online!"
+SenderNotPlayer: "&cYou are not a fucking player!"
+SpecifyTarget: "&cYou must specify the target"
+ServerVersionUnsupported: "&cSorry, your server version, %version%, is unsupported."
+NoSuchWorld: "&cUnknown world"
+NoSuchCommand: "&cUnknown command"
+NoPerms: "&4You have no power here..."
+Enabled: "Enabled... bitch"
+Disabled: "Disabled... bitch"
+True: "Skeet skeet mudafuka"
+False: "False... usuk"
+VanishOn: "Vanished"
+VanishOff: "Visible"
+
+# TP
+TpRemote: "%target1% has been teleported to %target2%"
+TpDisabled: "%target% has teleportation disabled!"
+Tpa: "You have sent a teleport request to %target%"
+TpSelf: "You cannot teleport to yourself, idiot."
+Tpa_Request: "%sender% has requested to teleport to you"
+Tpa_Accept: "%target% has accepted your teleport request. You will be teleported in %time% seconds."
+Tpa_Accept1: "You have accepted %sender%'s request"
+Tpa_Deny: "%target% has denied your teleport request. You fucking suck."
+Tpa_Deny1: "You have denied %sender%'s request"
+TpaCooldown: "You must wait %time% seconds until you can tpa again."
+TpaPending: "You already have a request pending. Pendejo"
+TpToggleOff: "You have DISABLED teleport requests to you. Pathetic..."
+TpToggleOn: "You have ENABLED teleport requests to you."
+RTP: "You have been randomly teleported. Don't have too much fun!"
+Tp_Failed: "Teleportation has failed you once again!"
+
+# utils.Listeners
+Back: "Returning to your last location"
+BackNone: "You do not have a recent location to go back to"
+ClearInventory: "&7Your inventory has just been cleared. Hopefully you didn't have any God-like items on you!"
+ClearInventoryOther: "%target%'s inventory has been cleared!"
+EnderChest: "Opening your ender chest..."
+EnderChestOthers: "Opening %target%'s ender chest..."
+Feed: "Your hunger seems to have subsided for now..."
+FeedAll: "Everyone has been fed..."
+FeedOther: "%target% has been fed"
+FirstJoin_Message: "&eWelcome to the development server, &e&l%player%, &aonly those with authorized access may use this server.!"
+Fly: "Flying has been %mode%"
+FlyOthers: "Flying for %target%, has been %mode%"
+FrozenLogin: "&c&lYou are still frozen, please contact a server administrator to be un-frozen!"
+FullInventory: "&cYou have a full inventory. Please free up some space!"
+Gamemode: "Your gamemode has been updated to %mode%"
+GamemodeOther: "%target%'s gamemode has been updated to "
+God: "Your godmode has been %mode%"
+GodOthers: "Godmode for %player% has been %mode%"
+Heal: "&eYou have been healed."
+HealAll: "You have healed everyone!"
+HealOther: "%target% has been healed!"
+InvalidNumber: "Only whole numbers between 1-10 may be chosen."
+InstantRespawnToggle: "You have toggled instant respawn to %mode%"
+ItemIsAir: "&cYou are holding air, not an item..."
+NoRequest: "You do not have any teleport requests..."
+Private Warps: "Here are a list of your private warps..."
+Quit_Message: "&8[&c-&8] &c%player%"
+ReJoin_Message: "&8[&6+&8] &e%player%"
+SetFirstSpawn: "&e&lThe First-join Spawn Point has been set"
+SetSpawn: "&eSpawn has been successfully set."
+Spawn: "You have been successfully teleported to spawn."
+Whatsthis: "What a terrible night for a curse..."
+Whatsthis_AtTarget: "You have cursed %target%."
+Wheather: "&eThe server's current weather is, &c%weather%"
+WheatherChanged: "&aYou have changed the weather to, &e%weather%"
+World: "&bYou have been teleported to the spawn of %world%"
+
+#Misc
+AFK: "%player% is now AFK"
+DynamicSignEditToggled: "&aDynamic Sign Editing is now %state%"
+NotAFK: "%player% is no longer AFK"
+NotLookingAtSign: "&cYou must be looking at a sign!"
+Repair_Success: "&aItem Repaired!"
+Repair_Failure: "&cThis item cannot be repaired."
+SignEdited: "&bThe sign has been edited."
+SignTooManyLines: "&eYou have provided too many lines: %lines%"
+SignLineCharOverflow: "&eToo many characters Max = 15, Provided: %length%"
+SignEditFailed: "&eFailed to edit this sign!"
+VanishedPlayer: "You are now %mode%"
+VanishedTarget: "%target% is now %mode%"
+
+# How 2 Use Messages a.k.a. Help Text
+WhoIsHelp: "/whois <player>"
+
+# Fun
+Annoy: "&4&l&oANNOYANCE"
+Argh: "&bArghhh, Piratey treasure awaits at yee spawn!"
+EmptyHeadSlot: "&cYou already have something on your head!"
+Pony: "%PonyPerson% &rsays: %Random_Pony%" #Sorry not sorry pickle, but i'm bringing it back, just for you, <3
+PonyPerson: "PickleGodLordOmegaLul"
+WalkSpeed: "Your walkspeed has been set to, %amount%"
+FlySpeed: "Your flyspeed has been set to, %amount%"
+Hat: "You have equipped %item% to your head area"
+Extinguish: "&cYour inner demon has calmed down"
+ExtinguishTarget: "You have been extinguished by, %sender%"
+Heads: "Heads"
+Tails: "Tails"
+
+#Warp
+WarpCreated: "Warp \"%name%\" has been created."
+WarpDeleted: "Warp was deleted."
+WarpToggled: "This warp is now %enabled%"
+WarpOtherFailed: "%player% could not be warped, reason: %reason%"
+WarpPermission: "The permission for this warp is: %permission%"
+WarpPermissionEdited: "The permission for this warp has been updated"
+WarpNullPermission: "This warp has no permission set"
+WarpWhitelist: "Warp whitelist has been %enabled%."
+WarpBlacklist: "Warp blacklist has been %enabled%."
+WarpDenied: "You may not access this warp!"
+WarpDisabled: "This warp has been disabled."
+WarpWhitelistOperation: "%player% has been %operation% to the whitelist."
+WarpBlacklistOperation: "%player% has been %operation% to the blacklist."
+WarpUnsafe: "That warp is not safe!"
+
+# Links
+Discord: "&bCome &3join &bour &3discord &bat &3https://discordapp.com/invite/nY5yFhs"
+Forums: "&aVisit our forums at: &bhttps://forums.xiav.icu"
+Twitter: "Check out our twitter at: https://twitter.com/XiavicNetwork"
+Website: "&eOur Website&c: &bhttps://xiav.icu"
+Youtube: "Our amazing Youtube Channel: https://www.youtube.com/channel/UCzl5jhb9JRDnwjIylvo92ww"
+
+# Cheat
+CheatExp: "&8[&cDebug&8] &7Your Exp has been set to 9999 levels."
+CheatArmor: "&8[&cDebug&8] &7You have been given the CheatArmor set!"
+
+# High Staff
+ConfigUpdate: "&8[&cDebug&8] &7The config files have been updated!"
+Version: "&8[&cDebug&8] &7The current running version is %version%..."
+DatabaseError: "Connection was NOT set-up properly. Please double check your database settings. :("
