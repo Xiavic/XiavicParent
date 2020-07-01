@@ -269,10 +269,18 @@ public class DistributedYamlDAO implements DataAccessObject {
     @Override @NotNull public Set<String> keySet() {
         Set<String> keys = new HashSet<>();
         for (DataAccessObject dao : temp) {
-            keys.addAll(dao.keySet());
+            try {
+                keys.addAll(dao.keySet());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
         for (DataAccessObject dao : cached) {
-            keys.addAll(dao.keySet());
+            try {
+                keys.addAll(dao.keySet());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
         }
         for (final Path path : fragmentIndex) {
             keys.addAll(cache(path).keySet());
@@ -372,7 +380,12 @@ public class DistributedYamlDAO implements DataAccessObject {
         }
         boolean success = true;
         for (DataAccessObject object : daos) {
-            if (success && !object.writeToDisk()) {
+            try {
+                if (success && !object.writeToDisk()) {
+                    success = false;
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
                 success = false;
             }
         }
