@@ -1,9 +1,9 @@
 package com.github.xiavic.essentials.v1_16_R1;
 
 import com.github.xiavic.lib.inventory.InventorySerializer;
-import net.minecraft.server.v1_15_R1.*;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftInventoryPlayer;
+import net.minecraft.server.v1_16_R1.*;
+import org.bukkit.craftbukkit.v1_16_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_16_R1.inventory.CraftInventoryPlayer;
 import org.bukkit.entity.Player;
 
 import java.io.ByteArrayInputStream;
