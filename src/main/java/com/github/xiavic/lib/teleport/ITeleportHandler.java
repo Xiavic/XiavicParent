@@ -20,7 +20,7 @@ public interface ITeleportHandler {
     // 2 - player2 disabled
     int remoteTp(Player p1, Player p2);
 
-    Location getLastLocation(Player player) throws Exception;
+    Location getLastLocation(Player player);
 
     boolean isDisabled(Player player);
 
