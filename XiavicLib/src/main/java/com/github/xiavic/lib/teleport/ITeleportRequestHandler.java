@@ -10,7 +10,13 @@ public interface ITeleportRequestHandler {
 
     boolean canTpa(Player player);
 
-    void parseRequest(Player player, boolean accepted);
+    /**
+     * Parse and return the most recent teleport request of the given player.
+     * @param player The player to parse.
+     * @param accepted Whether the request should be accepted.
+     * @return Returns the origin player.
+     */
+    Player parseRequest(Player player, boolean accepted);
 
     // 0 - success
     // 1 - tpa already pending
