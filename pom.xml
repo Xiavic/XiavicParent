@@ -17,8 +17,6 @@
         <module>nms/bukkit-1.16</module>
         <module>nms/bukkit-1.15</module>
         <module>nms/bukkit-1.14</module>
-        <module>nms/bukkit-1.13</module>
-        <module>nms/bukkit-1.13-legacy</module>
     </modules>
 
     <description>A</description>
