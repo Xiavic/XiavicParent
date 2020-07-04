@@ -5,6 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.xiavic</groupId>
+<<<<<<< HEAD
     <artifactId>XiavicParent</artifactId>
     <version>1.0</version>
     <packaging>pom</packaging>
@@ -18,6 +19,11 @@
         <module>nms/bukkit-1.15</module>
         <module>nms/bukkit-1.14</module>
     </modules>
+=======
+    <artifactId>XiavicLib</artifactId>
+    <version>1.1</version>
+    <modelVersion>4.0.0</modelVersion>
+>>>>>>> d7cfeae... Add a new NMSVersion class, bump version number
 
     <description>A</description>
     <properties>
