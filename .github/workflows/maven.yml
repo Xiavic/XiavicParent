@@ -5,9 +5,9 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ master, ACF ]
+    branches: [ master ]
   pull_request:
-    branches: [ master, ACF ]
+    branches: [ master ]
 
 jobs:
   build:
@@ -20,5 +20,77 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
+    
+    - name: Download BuildTools
+      run: |
+        if test -f ./temp; then 
+          exit 0 
+        fi
+        mkdir ./temp
+        curl https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar --output ./temp/BuildTools.jar
+    - name: Cache local Maven repository
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+          
+    - name: Build-1.14.2
+      run: |
+        VERSION=1.14.2
+        ARTIFACT='spigot-'$VERSION'-R0.1-SNAPSHOT.jar'
+
+        FILE=~/.m2/repository/org/spigotmc/spigot/$VERSION'-R0.1-SNAPSHOT/spigot-'$VERSION'-R0.1-SNAPSHOT.jar'
+        echo $FILE
+        if test -f $FILE; then 
+          echo "$VERSION already exists. Skipping..."
+          exit 0 
+        fi
+        echo "Building and installing $VERSION" 
+        java -jar ./temp/BuildTools.jar --rev $VERSION
+        echo "Pausing for 10 seconds..."
+        sleep 10
+        
+    - name: Build-1.15.2
+      run: |
+        VERSION=1.15.2
+        ARTIFACT='spigot-'$VERSION'-R0.1-SNAPSHOT.jar'
+
+        FILE=~/.m2/repository/org/spigotmc/spigot/$VERSION'-R0.1-SNAPSHOT/spigot-'$VERSION'-R0.1-SNAPSHOT.jar'
+        echo $FILEa
+        if test -f $FILE; then 
+          echo "$VERSION already exists. Skipping..."
+          exit 0 
+        fi
+        echo "Building and installing $VERSION"
+        java -jar ./temp/BuildTools.jar --rev $VERSION
+        echo "Pausing for 10 seconds..."
+        sleep 10
+      
+    - name: Build-1.16.1
+      run: |
+        VERSION=1.16.1
+        ARTIFACT='spigot-'$VERSION'-R0.1-SNAPSHOT.jar'
+
+        FILE=~/.m2/repository/org/spigotmc/spigot/$VERSION'-R0.1-SNAPSHOT/spigot-'$VERSION'-R0.1-SNAPSHOT.jar'
+        echo $FILE
+        if test -f $FILE; then 
+          echo "$VERSION already exists. Skipping..."
+          exit 0 
+        fi
+        echo "Building and installing $VERSION"
+        java -jar ./temp/BuildTools.jar --rev $VERSION
+        echo "Pausing for 10 seconds..."
+        sleep 10
+      
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+      
+    - name: Cache local Maven repository
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
