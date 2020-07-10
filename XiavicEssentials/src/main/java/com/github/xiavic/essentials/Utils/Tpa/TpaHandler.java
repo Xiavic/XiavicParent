@@ -100,6 +100,7 @@ public class TpaHandler implements ITeleportRequestHandler {
         }
         if (teleportHandler.isDisabled(target))
             return 2;
+
         requests.add(new TpaRequest(origin, target));
         startCooldown(origin);
         return 0;

@@ -26,20 +26,27 @@ import org.jetbrains.annotations.NotNull;
         new GameModeCommandHandler(commandManager);
     }
 
-    @Default @CommandAlias("clear|ci") @CommandPermission("Xiavic.staff.clearothers")
-    public void clearInventory(final Player player) {
-        player.getInventory().clear();
-        Utils.sendMessage(player, commandMessages.messageInventoryCleared);
-    }
+    @Default @CommandAlias("clear|ci") @CommandPermission("Xiavic.staff.clear") @CommandCompletion("@players")
+    public void clearInventory(Player player, @Optional String otherPlayer) {
 
-    @Default @CommandAlias("clear|ci") @CommandPermission("Xiavic.staff.clearothers")
-    @CommandCompletion("@players")
-    public void clearInventory(final CommandSender sender, final Player player) {
-        clearInventory(player);
-        if (sender != player) {
-            Utils.sendMessage(sender, commandMessages.messageInventoryClearedOther, "%target%",
-                player.getDisplayName());
+        if (otherPlayer != null) {
+            if (player.hasPermission("Xiavic.staff.clearothers")) {
+
+                Player otherPlayerObj = Bukkit.getPlayer(otherPlayer);
+                assert otherPlayerObj != null;
+
+                otherPlayerObj.getInventory().clear();
+                Utils.sendMessage(otherPlayerObj, commandMessages.messageInventoryCleared);
+
+
+            }
+        } else {
+
+            player.getInventory().clear();
+            Utils.sendMessage(player, commandMessages.messageInventoryCleared);
+
         }
+
     }
 
     @Default @CommandAlias("coreconfigupdate|ccu") @CommandPermission("Xiavic.staff.config.update")
@@ -84,6 +91,18 @@ import org.jetbrains.annotations.NotNull;
         Utils.sendMessage(player, commandMessages.messageSetFirstJoinSpawnPoint);
     }
 
+    @Default @CommandAlias("setspawn") @CommandPermission("Xiavic.staff.setspawn")
+    public void setSpawn(final Player player) {
+        final Location loc = player.getLocation();
+        final World world = loc.getWorld();
+        final double x = loc.getX(), y = loc.getY(), z = loc.getZ();
+        final float yaw = loc.getYaw(), pitch = loc.getPitch();
+        final String output =
+                world.getName() + "," + x + "," + y + "," + z + "," + yaw + "," + pitch;
+        Main.mainConfig.set("SpawnSystem.Spawn", output);
+        Utils.sendMessage(player, commandMessages.messageSetWorldSpawn);
+    }
+
     @Default @CommandAlias("fly") @CommandPermission("Xiavic.staff.fly")
     public void toggleFly(final Player player) {
         player.setAllowFlight(!player.getAllowFlight());
@@ -109,22 +128,33 @@ import org.jetbrains.annotations.NotNull;
             String.valueOf(speed));
     }
 
-    @Default @CommandAlias("god") @CommandCompletion("true|false")
-    @CommandPermission("Xiavic.staff.god")
-    public void toggleGod(final Player player, @Optional Boolean enabled) {
-        enabled = enabled == null ? !player.isInvulnerable() : enabled;
-        player.setInvulnerable(enabled);
-        Utils.sendMessage(player, commandMessages.messagePlayerChangeGodMode, "%mode%",
-            enabled.toString());
-    }
-
     @Default @CommandAlias("god") @CommandCompletion("@players true|false")
-    @CommandPermission("Xiavic.staff.godothers")
-    public void toggleGod(final CommandSender sender, final Player player,
-        @Optional final Boolean enabled) {
-        toggleGod(player, enabled);
-        Utils.sendMessage(sender, commandMessages.messagePlayerChangeGodModeOther, "%target%",
-            player.getDisplayName(), "%mode%", String.valueOf(player.isInvulnerable()));
+    @CommandPermission("Xiavic.staff.god")
+    public void toggleGod(Player player, @Optional String otherPlayer, @Optional Boolean enabled) {
+
+        if (otherPlayer != null) {
+
+            if (player.hasPermission("Xiavic.staff.godothers")) {
+
+                Player otherPlayerObj =  Bukkit.getPlayer(otherPlayer);
+                assert otherPlayerObj != null;
+
+                // Do Something
+                enabled = enabled == null ? !otherPlayerObj.isInvulnerable() : enabled;
+                otherPlayerObj.setInvulnerable(enabled);
+                Utils.sendMessage(otherPlayerObj, commandMessages.messagePlayerChangeGodMode, "%mode%", enabled.toString());
+                Utils.sendMessage(player, commandMessages.messagePlayerChangeGodMode, "%mode%", enabled.toString());
+
+            }
+
+        } else {
+
+            enabled = enabled == null ? !player.isInvulnerable() : enabled;
+            player.setInvulnerable(enabled);
+            Utils.sendMessage(player, commandMessages.messagePlayerChangeGodMode, "%mode%", enabled.toString());
+
+        }
+
     }
 
     @Default @CommandAlias("heal") @CommandPermission("Xiavic.staff.heal")

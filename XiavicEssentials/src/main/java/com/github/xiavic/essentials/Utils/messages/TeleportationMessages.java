@@ -47,6 +47,8 @@ public class TeleportationMessages extends AbstractMessageProvider {
         createMessage("teleporting-previous", "Returning to your last location");
     @NotNull public Message messageNoPreviousLocation =
         createMessage("no-previous-location", "You do not have a recent location to go back to");
+    @NotNull public Message messageNotValidTarget =
+            createMessage("no-valid-target", "Sorry, we could not find a user by that name!");
 
     private TeleportationMessages() {
     }
