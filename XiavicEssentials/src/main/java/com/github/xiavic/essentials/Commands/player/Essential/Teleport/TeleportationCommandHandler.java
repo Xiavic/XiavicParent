@@ -2,9 +2,8 @@ package com.github.xiavic.essentials.Commands.player.Essential.Teleport;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.BukkitCommandManager;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandCompletion;
-import co.aikar.commands.annotation.CommandPermission;
+import co.aikar.commands.annotation.*;
+import com.github.xiavic.essentials.Utils.messages.CommandMessages;
 import com.github.xiavic.essentials.Utils.messages.TeleportationMessages;
 import com.github.xiavic.essentials.Main;
 import com.github.xiavic.essentials.Utils.LocationUtils;
@@ -20,6 +19,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings("unused")
@@ -31,7 +31,7 @@ public class TeleportationCommandHandler extends BaseCommand {
     private final ITeleportHandler teleportHandler;
     private final TpaHandler tpaHandler;
 
-    public TeleportationCommandHandler(@NotNull final BukkitCommandManager commandManager,
+    public TeleportationCommandHandler(final BukkitCommandManager commandManager,
         @NotNull final ITeleportHandler teleportHandler, @NotNull final TpaHandler tpaHandler) {
         commandManager.registerCommand(this);
         this.plugin = (Main) commandManager.getPlugin();
@@ -39,7 +39,7 @@ public class TeleportationCommandHandler extends BaseCommand {
         this.tpaHandler = tpaHandler;
     }
 
-    @CommandAlias("back") @CommandPermission("Xiavic.player.back")
+    @Default @CommandAlias("back") @CommandPermission("Xiavic.player.back")
     public void doBack(final Player player) {
         final Location last = teleportHandler.getLastLocation(player);
         if (last != null) {
@@ -50,7 +50,7 @@ public class TeleportationCommandHandler extends BaseCommand {
         }
     }
 
-    @CommandAlias("randomteleport|rtp") @CommandPermission("Xiavic.player.rtp")
+    @Default @CommandAlias("randomteleport|rtp") @CommandPermission("Xiavic.player.rtp")
     public void doRandomTeleport(final Player player) {
         final double distance = plugin.getConfig().getDouble("RTPDistance");
         double randomX = (ThreadLocalRandom.current().nextDouble() * (distance * 2)) - distance;
@@ -66,36 +66,35 @@ public class TeleportationCommandHandler extends BaseCommand {
         }
     }
 
-    @CommandAlias("spawn") @CommandPermission("Xiavic.player.spawn")
-    public void doSpawnTeleport(final Player player) {
-        final Location spawn = LocationUtils.getLocation("SpawnSystem.Spawn");
-        teleportHandler.teleport(player, spawn);
-        Utils.sendMessage(player, tpMessages.messageTeleported, "has", "have", "%target1%", "You",
-            "%target2%", "Spawn");
-    }
+    @Default @CommandAlias("spawn") @CommandPermission("Xiavic.player.spawn") @CommandCompletion("@Players")
+    public void doSpawnTeleport(Player player, @Optional String otherPlayer) {
+        if (otherPlayer == null) {
 
-    @CommandAlias("spawn") @CommandPermission("Xiavic.staff.spawnothers")
-    @CommandCompletion("vararg_players:pop=0")
-    public void doSpawnTeleport(final CommandSender sender, String... players) {
-        final Location spawn = LocationUtils.getLocation("SpawnSystem.Spawn");
-        for (String arg : players) {
-            Player target = Bukkit.getPlayer(arg);
-            if (target != null) {
-                teleportHandler.teleport(target, spawn);
-                Utils.sendMessage(sender, tpMessages.messageTeleported, "%target1%", arg,
-                    "%target2%", "Spawn");
-                if (sender != target) {
-                    Utils.sendMessage(target, tpMessages.messageTeleported, "has", "have",
-                        "%target1%", "You", "%target2%", "Spawn");
-                }
+            final Location spawn = LocationUtils.getLocation("SpawnSystem.Spawn");
+            teleportHandler.teleport(player, spawn);
+            Utils.sendMessage(player, tpMessages.messageTeleported, "has", "have", "%target1%", "You", "%target2%", "Spawn");
+
+        } else {
+
+            if (player.hasPermission("Xiavic.staff.spawnothers")) {
+
+                Player otherPlayerObj = Bukkit.getPlayer(otherPlayer);
+                final Location spawn = LocationUtils.getLocation("SpawnSystem.Spawn");
+                teleportHandler.teleport(otherPlayerObj, spawn);
+                assert otherPlayerObj != null;
+                Utils.sendMessage(otherPlayerObj, tpMessages.messageTeleported, "has", "have", "%target1%", "You", "%target2%", "Spawn");
+
             } else {
-                Utils.sendMessage(sender, messages.messageVarArgPlayerNotFound, "%player%", arg);
+                Utils.sendMessage(player, messages.messageNoPermission);
             }
+
         }
+
     }
 
-    @CommandAlias("tpa") @CommandPermission("Xiavic.player.tpa") @CommandCompletion("@players")
-    public void doTeleportRequest(final Player sender, final Player target) {
+
+    @Default @CommandAlias("tpa") @CommandPermission("Xiavic.player.tpa") @CommandCompletion("@players")
+    public void doTeleportRequest(Player sender, Player target) {
         if (sender == target) {
             Utils.sendMessage(sender, tpMessages.messageTeleportSelf);
             return;
@@ -111,12 +110,12 @@ public class TeleportationCommandHandler extends BaseCommand {
         }
     }
 
-    @CommandAlias("tpaccept") @CommandPermission("Xiavic.player.tpaccept")
+    @Default @CommandAlias("tpaccept") @CommandPermission("Xiavic.player.tpaccept")
     public void acceptTeleportRequest(final Player sender) {
         tpaHandler.parseRequest(sender, true);
     }
 
-    @CommandAlias("tpdeny") @CommandPermission("Xiavic.player.tpdeny")
+    @Default @CommandAlias("tpdeny") @CommandPermission("Xiavic.player.tpdeny")
     public void denyTeleportRequest(final Player sender) {
         tpaHandler.parseRequest(sender, false);
     }
