@@ -28,23 +28,20 @@ import org.jetbrains.annotations.NotNull;
     }
 
     @Default @CommandAlias("clear|ci") @CommandPermission("Xiavic.staff.clear") @CommandCompletion("@players")
-    public void clearInventory(Player player, @Optional String otherPlayer) {
+    public void clearInventory(Player player, @Optional OnlinePlayer otherPlayer) {
 
         if (otherPlayer != null) {
             if (player.hasPermission("Xiavic.staff.clearothers")) {
-
-                Player otherPlayerObj = Bukkit.getPlayer(otherPlayer);
-                assert otherPlayerObj != null;
-
-                otherPlayerObj.getInventory().clear();
-                Utils.sendMessage(otherPlayerObj, commandMessages.messageInventoryCleared);
+                otherPlayer.player.getInventory().clear();
+                Utils.sendMessage(otherPlayer.player, "commands.inventory.clear");
+                Utils.sendMessage(player, "commands.inventory-clear-other");
 
 
             }
         } else {
 
             player.getInventory().clear();
-            Utils.sendMessage(player, commandMessages.messageInventoryCleared);
+            Utils.sendMessage(player, "commands.inventory.clear");
 
         }
 
@@ -55,36 +52,28 @@ import org.jetbrains.annotations.NotNull;
         Main.mainConfig.forceReload();
         Main.messages.forceReload();
         Main.permissions.forceReload();
-        Utils.sendMessage(sender, messages.messageConfigUpdated);
+        Utils.sendMessage(sender, "messages.config-updated");
     }
 
     @Default @CommandAlias("coreversion") @CommandPermission("Xiavic.staff.version")
     public void showVersion(final CommandSender sender) {
-        Utils.sendMessage(sender, messages.messageShowPluginVersion, "%version%",
-            Main.getPlugin(Main.class).getDescription().getVersion());
+        Utils.sendMessage(sender, "messages.config-version", "%version%", Main.getPlugin(Main.class).getDescription().getVersion());
     }
 
     @Default @CommandAlias("feed") @CommandPermission("Xiavic.staff.feed") @CommandCompletion("@players")
     public void feed(final Player player, @Optional OnlinePlayer otherPlayer) {
-
         if (otherPlayer != null) {
-
             if (player.hasPermission("Xiavic.staff.feedothers")) {
-
                 otherPlayer.player.setFoodLevel(20);
                 otherPlayer.player.setSaturation(20);
-                Utils.sendMessage(player, commandMessages.messagePlayerFedOther, "%target%", otherPlayer.getPlayer().getDisplayName());
-                Utils.sendMessage(otherPlayer.player, commandMessages.messagePlayerFed);
+                Utils.sendMessage(player, "commands.feed-other", "%target%", otherPlayer.getPlayer().getDisplayName());
+                Utils.sendMessage(otherPlayer.player, "commands.feed");
             }
-
         } else {
-
             player.setFoodLevel(20);
             player.setSaturation(20);
-            Utils.sendMessage(player, commandMessages.messagePlayerFed);
-
+            Utils.sendMessage(player, "commands.feed");
         }
-
     }
 
     @Default @CommandAlias("setfirstspawn") @CommandPermission("Xiavic.staff.setfirstspawn")
@@ -96,7 +85,7 @@ import org.jetbrains.annotations.NotNull;
         final String output =
             world.getName() + "," + x + "," + y + "," + z + "," + yaw + "," + pitch;
         Main.mainConfig.set("SpawnSystem.FirstSpawn", output);
-        Utils.sendMessage(player, commandMessages.messageSetFirstJoinSpawnPoint);
+        Utils.sendMessage(player, "commands.set-first-join");
     }
 
     @Default @CommandAlias("setspawn") @CommandPermission("Xiavic.staff.setspawn")
@@ -108,7 +97,7 @@ import org.jetbrains.annotations.NotNull;
         final String output =
                 world.getName() + "," + x + "," + y + "," + z + "," + yaw + "," + pitch;
         Main.mainConfig.set("SpawnSystem.Spawn", output);
-        Utils.sendMessage(player, commandMessages.messageSetWorldSpawn);
+        Utils.sendMessage(player, "commands.set-spawn");
     }
 
     @Default @CommandAlias("fly") @CommandPermission("Xiavic.staff.fly")
@@ -117,12 +106,12 @@ import org.jetbrains.annotations.NotNull;
             if (player.hasPermission("Xiavic.staff.flyothers")) {
                 otherplayer.player.setAllowFlight(!otherplayer.player.getAllowFlight());
                 otherplayer.player.setFlying(!otherplayer.player.isFlying());
-                Utils.sendMessage(otherplayer.player, commandMessages.messagePlayerFlyOther, "%target%", otherplayer.player.getDisplayName(), "%mode%", otherplayer.player.getAllowFlight() ? "&cenabled" : "&cdisabled");
+                Utils.sendMessage(otherplayer.player, "commands.fly-other", "%target%", otherplayer.player.getDisplayName(), "%mode%", otherplayer.player.getAllowFlight() ? "&cenabled" : "&cdisabled");
             }
         } else {
             player.setAllowFlight(!player.getAllowFlight());
             player.setFlying(!player.isFlying());
-            Utils.sendMessage(player, commandMessages.messagePlayerFly, "%mode%", player.getAllowFlight() ? "&cenabled" : "&cdisabled");
+            Utils.sendMessage(player, "commands.fly", "%mode%", player.getAllowFlight() ? "&cenabled" : "&cdisabled");
         }
     }
 
@@ -130,58 +119,41 @@ import org.jetbrains.annotations.NotNull;
     @CommandPermission("Xiavic.staff.flyspeed")
     public void toggleFlySpeed(final Player player, int speed) {
         player.setFlySpeed(speed / 10f);
-        Utils.sendMessage(player, commandMessages.messagePlayerChangeFlySpeed, "%amount%",
-            String.valueOf(speed));
+        Utils.sendMessage(player, "commands.flyspeed", "%amount%", String.valueOf(speed));
     }
 
     @Default @CommandAlias("god") @CommandCompletion("@players true|false")
     @CommandPermission("Xiavic.staff.god")
-    public void toggleGod(Player player, @Optional String otherPlayer, @Optional Boolean enabled) {
-
+    public void toggleGod(Player player, @Optional OnlinePlayer otherPlayer, @Optional Boolean enabled) {
         if (otherPlayer != null) {
-
             if (player.hasPermission("Xiavic.staff.godothers")) {
-
-                Player otherPlayerObj =  Bukkit.getPlayer(otherPlayer);
-                assert otherPlayerObj != null;
-
-                // Do Something
-                enabled = enabled == null ? !otherPlayerObj.isInvulnerable() : enabled;
-                otherPlayerObj.setInvulnerable(enabled);
-                Utils.sendMessage(otherPlayerObj, commandMessages.messagePlayerChangeGodMode, "%mode%", enabled.toString());
-                Utils.sendMessage(player, commandMessages.messagePlayerChangeGodMode, "%mode%", enabled.toString());
-
+                enabled = enabled == null ? !otherPlayer.player.isInvulnerable() : enabled;
+                otherPlayer.player.setInvulnerable(enabled);
+                Utils.sendMessage(otherPlayer.player, "commands.god-other", "%mode%", enabled.toString());
+                Utils.sendMessage(player, "commands.god", "%mode%", enabled.toString());
             }
-
         } else {
-
             enabled = enabled == null ? !player.isInvulnerable() : enabled;
             player.setInvulnerable(enabled);
-            Utils.sendMessage(player, commandMessages.messagePlayerChangeGodMode, "%mode%", enabled.toString());
-
+            Utils.sendMessage(player, "commands.god", "%mode%", enabled.toString());
         }
-
     }
 
     @Default @CommandAlias("heal") @CommandPermission("Xiavic.staff.heal") @CommandCompletion("@players")
     public void doHeal(final Player player, @Optional OnlinePlayer otherplayer) {
         if (otherplayer != null) {
             if (player.hasPermission("Xiavic.staff.healothers")) {
-
                 otherplayer.player.setHealth(20);
                 otherplayer.player.setSaturation(20);
                 otherplayer.player.setFoodLevel(20);
-                Utils.sendMessage(otherplayer.player, commandMessages.messagePlayerHealed);
+                Utils.sendMessage(otherplayer.player, "commands.heal");
                 Utils.sendMessage(player, "commands.heal-other");
-
             }
         } else {
-
             player.setHealth(20);
             player.setSaturation(20);
             player.setFoodLevel(20);
-            Utils.sendMessage(player, commandMessages.messagePlayerHealed);
-
+            Utils.sendMessage(player, "commands.heal");
         }
     }
 
@@ -192,9 +164,9 @@ import org.jetbrains.annotations.NotNull;
             player.setHealth(20);
             player.setSaturation(20);
             player.setFoodLevel(20);
-            Utils.sendMessage(player, commandMessages.messagePlayerHealed);
+            Utils.sendMessage(player, "commands.heal");
         }
-        Utils.sendMessage(sender, commandMessages.messageAllPlayersHealed);
+        Utils.sendMessage(sender, "commands.heal-all");
     }
 
     @Default @CommandAlias("more") @CommandPermission("Xiavic.staff.more")
@@ -209,12 +181,10 @@ import org.jetbrains.annotations.NotNull;
     @CommandCompletion("1 2 3 4 5 6 7 8 9 10")
     public void toggleWalkSpeed(final Player player, final int speed) {
         player.setWalkSpeed(speed / 10f);
-        Utils.sendMessage(player, commandMessages.messagePlayerChangeWalkSpeed, "%amount%",
-            String.valueOf(speed));
+        Utils.sendMessage(player, "commands.walkspeed", "%amount%", String.valueOf(speed));
     }
 
-    // Rewrite This Crap
-    @Default @CommandAlias("whois") @CommandPermission("Xiavic.player.realname") 
+    @Default @CommandAlias("whois") @CommandPermission("Xiavic.player.realname")
     public void showRealName(final CommandSender sender, final OnlinePlayer otherplayer) {
 
         Utils.sendMessage(sender, commandMessages.messageWhoIsPlayer, "%nickname%", otherplayer.player.getDisplayName(), "%username%", otherplayer.player.getName());
