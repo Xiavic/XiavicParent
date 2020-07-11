@@ -50,6 +50,9 @@ commands:
   rtp:
     usage: /rtp
     description: Randomly teleports you within a defined area.
+  goto:
+    usage: /goto
+    description: Goto a Player.
   argh:
     usage: /argh
     description: Piratey Treasure.

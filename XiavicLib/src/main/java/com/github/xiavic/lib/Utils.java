@@ -115,22 +115,4 @@ public class Utils {
         return server.getClass().getPackage().getName().replace("org.bukkit.craftbukkit", "");
     }
 
-    @Deprecated public static void teleport(final Player player, final Location location) {
-        handler.processPlayerTeleport(player);
-        player.teleport(location);
-    }
-
-    // This teleport method lets you send a message to the player here instead of
-    // having to do it where ever you called this method
-
-    @Deprecated
-    public static void teleport(@NotNull final Player player, @NotNull final Location location,
-        @Nullable final String message) {
-        handler.processPlayerTeleport(player);
-        player.teleport(location);
-        if (message != null)
-            chat(player, message);
-    }
-
-
 }

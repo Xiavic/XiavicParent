@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
@@ -202,18 +203,18 @@ public class Utils {
         return server.getClass().getPackage().getName().replace("org.bukkit.craftbukkit", "");
     }
 
-    @Deprecated public static void teleport(Player player, Location location) {
-        teleportHandler.processPlayerTeleport(player);
-        player.teleport(location);
-    }
-
-    // This teleport method lets you send a message to the player here instead of
-    // having to do it where ever you called this method
-    @Deprecated public static void teleport(Player player, Location location, String messagePath) {
-        teleportHandler.processPlayerTeleport(player);
-        player.teleport(location);
-        chat(player, Main.messages.getString(messagePath));
-    }
+//    @Deprecated public static void teleport(Player player, Location location) {
+//        teleportHandler.processPlayerTeleport(player);
+//        player.teleport(location);
+//    }
+//
+//    // This teleport method lets you send a message to the player here instead of
+//    // having to do it where ever you called this method
+//    @Deprecated public static void teleport(Player player, Location location, String messagePath) {
+//        teleportHandler.processPlayerTeleport(player);
+//        player.teleport(location);
+//        chat(player, Main.messages.getString(messagePath));
+//    }
 
 
 
@@ -231,6 +232,7 @@ public class Utils {
         String replacedMessage = format(Main.messages.getString(messagesKey), replacements);
         if (replacedMessage.isEmpty()) {
             Main.getPlugin(Main.class).getLogger().log(Level.WARNING, "Formatting of Message, has failed!");
+            Main.getPlugin(Main.class).getLogger().log(Level.SEVERE, messagesKey);
         }
 
         if (replacedMessage.contains("<") && replacedMessage.contains(">")) {
@@ -245,6 +247,19 @@ public class Utils {
         }
 
     }
+
+    public static void debugLog(Object object) {
+        Main.getPlugin(Main.class).getLogger().log(Level.WARNING, object.toString());;
+    }
+
+    /*
+        Teleportation Utils Version 1.0 by Devon & Kerlab
+
+            This contains certain utils that the rewritten Teleportation & TPRequests
+            system uses. Do not modify the code below unless you can the methods in
+            TpaHandler & TeleportationHandler.
+
+     */
 
 
 

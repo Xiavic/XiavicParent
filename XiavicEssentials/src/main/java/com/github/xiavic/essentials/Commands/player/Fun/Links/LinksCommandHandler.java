@@ -23,25 +23,25 @@ public class LinksCommandHandler extends BaseCommand {
 
     @CommandAlias("discord") @CommandPermission("Xiavic.links.discord")
     public void showDiscord(@NotNull final CommandSender sender) {
-        Utils.sendMessage(sender, linkMessages.messageDiscord);
+        Utils.sendMessage(sender, "links.discord");
     }
 
     @CommandAlias("forums") @CommandPermission("Xiavic.links.forums")
     public void showForums(@NotNull final CommandSender sender) {
-        Utils.sendMessage(sender, linkMessages.messageForums);
+        Utils.sendMessage(sender, "links.forums");
     }
 
     @CommandAlias("website") @CommandPermission("Xiavic.links.website")
     public void showWebsite(@NotNull final CommandSender sender) {
-        Utils.sendMessage(sender, linkMessages.messageWebsite);
+        Utils.sendMessage(sender, "links.website");
     }
     @CommandAlias("twitter") @CommandPermission("Xiavic.links.twitter")
     public void showTwitter(@NotNull final CommandSender sender) {
-        Utils.sendMessage(sender, linkMessages.messageTwitter);
+        Utils.sendMessage(sender, "links.twitter");
     }
     @CommandAlias("youtube") @CommandPermission("Xiavic.links.youtube")
     public void showYoutube(@NotNull final CommandSender sender) {
-        Utils.sendMessage(sender, linkMessages.messageYoutube);
+        Utils.sendMessage(sender, "links.youtube");
     }
 
 

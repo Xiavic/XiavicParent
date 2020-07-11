@@ -55,10 +55,9 @@ public class PonyCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        Player player = (Player) sender;
-        if (player.hasPermission(Main.permissions.getString("Pony"))) {
-            player.sendMessage(Utils.chat(Main.messages.getString("Pony")).replace("%Random_Pony%", ponies[r.nextInt(ponies.length)]).replace("%PonyPerson%", Utils.chat(rainbowizeString(Main.messages.getString("PonyPerson")))));
+    public boolean onCommand(CommandSender player, Command command, String label, String[] args) {
+        if (player.hasPermission("Xiavic.user.pony")) {
+            player.sendMessage(Utils.chat(Main.messages.getString("commands.pony")).replace("%Random_Pony%", ponies[r.nextInt(ponies.length)]).replace("%PonyPerson%", Utils.chat(rainbowizeString(Main.messages.getString("PonyPerson")))));
         } else {
             player.sendMessage(Utils.chat(Main.messages.getString("NoPerms")));
         }
