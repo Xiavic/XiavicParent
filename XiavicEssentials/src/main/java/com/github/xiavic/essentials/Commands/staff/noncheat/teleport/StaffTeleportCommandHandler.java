@@ -6,7 +6,9 @@ import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Subcommand;
+import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import com.github.xiavic.essentials.Main;
+import com.github.xiavic.essentials.Utils.Teleportation.TeleportationHandler;
 import com.github.xiavic.essentials.Utils.Utils;
 import com.github.xiavic.essentials.Utils.messages.CommandMessages;
 import com.github.xiavic.essentials.Utils.messages.TeleportationMessages;
@@ -27,37 +29,35 @@ import java.util.concurrent.TimeUnit;
 
     private static final CommandMessages commandMessages = CommandMessages.INSTANCE;
 
-    private final ITeleportHandler teleportHandler;
+    private final TeleportationHandler teleportHandler;
 
     public StaffTeleportCommandHandler(@NotNull final BukkitCommandManager commandManager,
-        @NotNull final ITeleportHandler teleportHandler) {
+        @NotNull final TeleportationHandler teleportHandler) {
         commandManager.registerCommand(this);
         this.teleportHandler = teleportHandler;
     }
 
-    @CommandAlias("teleport|tp") @CommandPermission("Xiavic.staff.tp")
-    @CommandCompletion("@players")
-    public void doTeleport(final Player sender, final Player target) {
-        teleportHandler.teleport(sender, target, false);
+    @CommandAlias("goto") @CommandPermission("Xiavic.staff.tp") @CommandCompletion("@players")
+    public void doTeleport(Player sender, OnlinePlayer target) {
+        teleportHandler.teleportToPlayer(sender, target.player, false);
         Utils.sendMessage(sender, teleportationMessages.messageTeleported, "has", "have",
-            "%target1%", "You", "%target2%", target.getDisplayName());
+            "%target1%", "You", "%target2%", target.player.getDisplayName());
     }
 
-    @CommandAlias("teleport|tp") @CommandPermission("Xiavic.staff.tp.other")
-    public void doTeleport(final CommandSender sender, final Player toTeleport,
-        final Player target) {
-        switch (teleportHandler.remoteTp(toTeleport, target)) {
-            case 0:
+    @CommandAlias("teleport|tp") @CommandPermission("Xiavic.staff.tp.other") @CommandCompletion("@players")
+    public void doTeleport(CommandSender sender, OnlinePlayer toTeleport, OnlinePlayer target) {
+        switch (teleportHandler.teleportRemote(toTeleport.player, target.player)) {
+            case SUCCESS:
                 Utils.sendMessage(sender, teleportationMessages.messageTeleported, "%target1%",
-                    toTeleport.getDisplayName(), "%target2%", target.getDisplayName());
+                    toTeleport.player.getDisplayName(), "%target2%", target.player.getDisplayName());
                 break;
-            case 1:
+            case P1DISABLED:
                 Utils.sendMessage(sender, teleportationMessages.messageTeleportationDisabled,
-                    "%target%", toTeleport.getDisplayName());
+                    "%target%", toTeleport.player.getDisplayName());
                 break;
-            case 2:
+            case P2DISABLED:
                 Utils.sendMessage(sender, teleportationMessages.messageTeleportationDisabled,
-                    "%target%", target.getDisplayName());
+                    "%target%", target.player.getDisplayName());
         }
     }
 
@@ -73,36 +73,31 @@ import java.util.concurrent.TimeUnit;
             if (p == sender) {
                 continue;
             }
-            final boolean invulnerable = sender.isInvulnerable();
+            boolean invulnerable = sender.isInvulnerable();
             if (immunity != 0) {
                 sender.setInvulnerable(true);
             }
-            Utils.sendMessage(p, teleportationMessages.messageForceTeleported);
-            teleportHandler.teleport(sender, p, false).thenAccept((unused) -> Bukkit.getScheduler()
-                .runTaskLater(Main.getPlugin(Main.class), () -> p.setInvulnerable(invulnerable),
-                    Utils.toTicks(immunity, TimeUnit.SECONDS)));
+
+            teleportHandler.teleportToPlayer(sender, p, true).thenAccept(
+                    (unused) -> Bukkit.getScheduler().runTaskLater(Main.getPlugin(Main.class),
+                            () -> p.setInvulnerable(invulnerable), Utils.toTicks(immunity, TimeUnit.SECONDS))
+            );
         }
         Bukkit.getScheduler().runTaskLater(Main.getPlugin(Main.class),
             () -> sender.setInvulnerable(senderInvulnerable),
             Utils.toTicks(immunity, TimeUnit.SECONDS)); //Revert invulnerability
     }
 
-    @CommandAlias("teleporthere|tphere") @CommandPermission("Xiavic.staff.tphere")
-    public void doTeleportHere(final Player sender, final Player toTeleport) {
-        Utils.sendMessage(toTeleport, teleportationMessages.messageForceTeleported);
-        teleportHandler.teleport(toTeleport, sender, false);
+    @CommandAlias("teleporthere|tphere") @CommandPermission("Xiavic.staff.tphere") @CommandCompletion("@players")
+    public void doTeleportHere(Player sender, OnlinePlayer otherPlayer) {
+        Utils.sendMessage(otherPlayer.player, teleportationMessages.messageForceTeleported);
+        teleportHandler.teleportToPlayer(sender, otherPlayer.player, true);
     }
 
     @Subcommand("teleportposition|tppos") @CommandPermission("Xiavic.staff.tppos")
-    public void doTeleportPosition(final Player sender, final double x, final double y,
-        final double z) {
-        doTeleportPosition(sender, sender.getWorld(), x, y, z);
+    public void doTeleportPosition(Player sender, double x, double y, double z) {
+        World world = sender.getWorld();
+        teleportHandler.teleportToLocation(sender, new Location(world, x, y, z));
     }
 
-    @Subcommand("teleportposition|tppos") @CommandPermission("Xiavic.staff.tppos")
-    @CommandCompletion("@worlds")
-    public void doTeleportPosition(final Player sender, final World world, final double x,
-        final double y, final double z) {
-        teleportHandler.teleport(sender, new Location(world, x, y, z));
-    }
 }

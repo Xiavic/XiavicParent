@@ -8,10 +8,9 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 public class RespawnEvent implements Listener {
 
     @EventHandler
-    public void onRespawn(PlayerRespawnEvent e) {
-        if (!e.isBedSpawn()) {
-            e.setRespawnLocation(LocationUtils.getLocation("Spawn"));
-        }
+    public void onRespawn(PlayerRespawnEvent event) {
+        if (event.isBedSpawn() | event.isAnchorSpawn()) { return; }
+        event.setRespawnLocation(LocationUtils.getLocation("SpawnSystem.Spawn"));
     }
 
 }

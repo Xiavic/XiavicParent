@@ -51,7 +51,7 @@ import org.jetbrains.annotations.NotNull;
     public void reloadConfiguration(final CommandSender sender) {
         Main.mainConfig.forceReload();
         Main.messages.forceReload();
-        Main.permissions.forceReload();
+//        Main.permissions.forceReload();
         Utils.sendMessage(sender, "messages.config-updated");
     }
 
@@ -100,17 +100,16 @@ import org.jetbrains.annotations.NotNull;
         Utils.sendMessage(player, "commands.set-spawn");
     }
 
-    @Default @CommandAlias("fly") @CommandPermission("Xiavic.staff.fly")
+    @Default @CommandAlias("fly") @CommandPermission("Xiavic.staff.fly") @CommandCompletion("@players")
     public void toggleFly(final Player player, @Optional OnlinePlayer otherplayer) {
         if (otherplayer != null) {
             if (player.hasPermission("Xiavic.staff.flyothers")) {
                 otherplayer.player.setAllowFlight(!otherplayer.player.getAllowFlight());
-                otherplayer.player.setFlying(!otherplayer.player.isFlying());
-                Utils.sendMessage(otherplayer.player, "commands.fly-other", "%target%", otherplayer.player.getDisplayName(), "%mode%", otherplayer.player.getAllowFlight() ? "&cenabled" : "&cdisabled");
+                Utils.sendMessage(player, "commands.fly-other", "%target%", otherplayer.player.getDisplayName(), "%mode%", otherplayer.player.getAllowFlight() ? "&cenabled" : "&cdisabled");
+                Utils.sendMessage(otherplayer.player, "commands.fly");
             }
         } else {
             player.setAllowFlight(!player.getAllowFlight());
-            player.setFlying(!player.isFlying());
             Utils.sendMessage(player, "commands.fly", "%mode%", player.getAllowFlight() ? "&cenabled" : "&cdisabled");
         }
     }

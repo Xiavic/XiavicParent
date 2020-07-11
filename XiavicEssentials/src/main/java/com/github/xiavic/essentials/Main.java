@@ -14,18 +14,16 @@ import com.github.xiavic.essentials.Commands.staff.noncheat.teleport.StaffTelepo
 import com.github.xiavic.essentials.Utils.CommandBooleanValue;
 import com.github.xiavic.essentials.Utils.EquipAnything.EquipEvents;
 import com.github.xiavic.essentials.Utils.Listeners.*;
-import com.github.xiavic.essentials.Utils.Tpa.TpaHandler;
+import com.github.xiavic.essentials.Utils.Teleportation.TeleportationHandler;
+import com.github.xiavic.essentials.Utils.Teleportation.TpaHandler;
 import com.github.xiavic.essentials.Utils.Utils;
-import com.github.xiavic.essentials.Utils.messages.CommandMessages;
 import com.github.xiavic.essentials.Utils.messages.Messages;
-import com.github.xiavic.essentials.Utils.messages.TeleportationMessages;
 import com.github.xiavic.lib.NMSHandler.NMS;
 import com.github.xiavic.lib.NMSHandler.NMSVersion;
 import com.github.xiavic.lib.inventory.InventorySerializer;
 import com.github.xiavic.lib.signedit.ISignEditor;
 import com.github.xiavic.lib.teleport.ITeleportHandler;
 import com.github.xiavic.lib.teleport.ITeleportRequestHandler;
-import de.leonhard.storage.Config;
 import de.leonhard.storage.LightningBuilder;
 import de.leonhard.storage.Yaml;
 import de.leonhard.storage.internal.settings.ConfigSettings;
@@ -40,7 +38,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.*;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 
@@ -53,7 +50,7 @@ public final class Main extends JavaPlugin {
     public static Yaml commands;
     public static Yaml database;
     public static TpaHandler tpaHandler;
-    public static TeleportHandler teleportHandler;
+    public static TeleportationHandler teleportHandler;
     public static NMS nmsImpl; //Should never be null after plugin init has completed.
     private static Main instance;
     private BukkitCommandManager commandManager;
@@ -169,7 +166,7 @@ public final class Main extends JavaPlugin {
         pm.registerEvents(new JoinQuit(), this);
         pm.registerEvents(new EquipEvents(), this);
         pm.registerEvents(new RespawnEvent(), this);
-        pm.registerEvents(teleportHandler, this);
+        // pm.registerEvents(teleportHandler, this); // What Events was this?
         AFKHandler.INSTANCE.registerTicker();
         pm.registerEvents(new MiscHandler(), this);
         pm.registerEvents(nmsImpl.getSignEditor(), this);
@@ -181,7 +178,8 @@ public final class Main extends JavaPlugin {
     private void registerShit() {
         tpaHandler = new TpaHandler();
         tpaHandler.loadTeleportHandler();
-        teleportHandler = new TeleportHandler();
+        teleportHandler = new TeleportationHandler();
+        Bukkit.getScheduler().runTaskTimer(this, tpaHandler, 0, 20);
     }
 
     private boolean registerNMSHandler() {
@@ -209,13 +207,11 @@ public final class Main extends JavaPlugin {
     private void registerProviders() {
         final ServicesManager serviceManager = Bukkit.getServicesManager();
         //Register NMS implementations
-        serviceManager
-                .register(ISignEditor.class, nmsImpl.getSignEditor(), this, ServicePriority.Low);
-        serviceManager.register(InventorySerializer.class, nmsImpl.getInventorySerializer(), this,
-                ServicePriority.Low);
+        serviceManager.register(ISignEditor.class, nmsImpl.getSignEditor(), this, ServicePriority.Low);
+        serviceManager.register(InventorySerializer.class, nmsImpl.getInventorySerializer(), this, ServicePriority.Low);
         //Register Teleport handlers
-        serviceManager.register(ITeleportHandler.class, new TeleportHandler(), this, ServicePriority.Low);
-        serviceManager.register(ITeleportRequestHandler.class, new TpaHandler(), this, ServicePriority.Low);
+        // serviceManager.register(ITeleportHandler.class, new TeleportHandler(), this, ServicePriority.Low);
+        // serviceManager.register(ITeleportRequestHandler.class, new TpaHandler(), this, ServicePriority.Low);
         //
     }
 
@@ -225,16 +221,15 @@ public final class Main extends JavaPlugin {
         ////////////////
         // messages.yml
         ////////////////
-        final Config messageFile = (LightningBuilder.fromFile(new File("plugins/XiavicCore/Resources/messages"))
+        messages = (LightningBuilder.fromFile(new File("plugins/XiavicCore/Resources/messages"))
                 .addInputStreamFromResource("messages.yml")
                 .setConfigSettings(ConfigSettings.PRESERVE_COMMENTS)
                 .setReloadSettings(ReloadSettings.AUTOMATICALLY)
                 .setDataType(DataType.SORTED)
                 .createConfig());
-        messages = messageFile;
-        messages_new.load(messageFile);
-        TeleportationMessages.INSTANCE.load(messageFile);
-        CommandMessages.INSTANCE.load(messageFile);
+        // messages_new.load(messageFile);
+        // TeleportationMessages.INSTANCE.load(messageFile);
+        // CommandMessages.INSTANCE.load(messageFile);
 
         ////////////////
         // config.yml

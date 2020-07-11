@@ -54,7 +54,7 @@ public class GameModeCommandHandler extends BaseCommand {
         }
     }
 
-    @Default @Subcommand("spectator|sp|3") @CommandAlias("gmsp")
+    @Default @Subcommand("spectator|sp|3") @CommandAlias("gmsp") @CommandPermission("Xiavic.gamemode.spectator")
     public void setGameModeSpectator(final Player player) {
         player.setGameMode(GameMode.SPECTATOR);
         Utils.sendMessage(player, commandMessages.messagePlayerChangeGamemode, "%mode%",

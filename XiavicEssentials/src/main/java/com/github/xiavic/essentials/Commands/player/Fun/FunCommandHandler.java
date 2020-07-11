@@ -28,6 +28,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
@@ -40,30 +41,30 @@ public class FunCommandHandler extends BaseCommand {
     private static final CommandMessages commandMessages = CommandMessages.INSTANCE;
     private static final TeleportationMessages tpMessages = TeleportationMessages.INSTANCE;
 
-    public FunCommandHandler(@NotNull final BukkitCommandManager commandManager) {
+    public FunCommandHandler(BukkitCommandManager commandManager) {
         commandManager.registerCommand(this);
     }
 
     @CommandAlias("afk") @CommandPermission("Xiavic.player.afk")
-    public void toggleAFK(@NotNull final Player player) {
+    public void toggleAFK(Player player) {
         final AFKHandler handler = AFKHandler.INSTANCE;
         handler.setAFK(player.getUniqueId(), !handler.isAFK(player.getUniqueId()));
     }
 
     @CommandAlias("argh") @CommandPermission("Xiavic.player.argh")
-    public void sendArgh(@NotNull final Player player) {
+    public void sendArgh(Player player) {
         Utils.sendMessage(player, commandMessages.messagePlayerArgh);
     }
 
     @CommandAlias("coinflip|cf") @CommandPermission("Xiavic.player.coinflip")
-    public void doCoinflip(@NotNull final Player player) {
-        final int random = ThreadLocalRandom.current().nextInt(0, 1);
+    public void doCoinflip(Player player) {
+        final int random = ThreadLocalRandom.current().nextInt(0, 2);
         final Message message = random == 0 ? messages.messageHeads : messages.messageTails;
         Utils.sendMessage(player, message);
     }
 
     @CommandAlias("hat") @CommandPermission("Xiavic.player.hat")
-    public void doHat(@NotNull final Player player) {
+    public void doHat(Player player) {
         final PlayerInventory playerInventory = player.getInventory();
         final ItemStack inHand = playerInventory.getItemInMainHand().clone();
         if (inHand.getType().isAir()) {
@@ -78,7 +79,7 @@ public class FunCommandHandler extends BaseCommand {
     }
 
     @CommandAlias("head") @CommandPermission("Xiavic.player.head") @SuppressWarnings("deprecation")
-    public void giveHead(@NotNull final Player sender, @NotNull final String offlinePlayer) {
+    public void giveHead(Player sender, String offlinePlayer) {
         Bukkit.getScheduler().runTaskAsynchronously(Main.getPlugin(Main.class), () -> {
             OfflinePlayer player = Bukkit.getOfflinePlayer(offlinePlayer);
             final ItemStack itemStack = new ItemStack(Material.PLAYER_HEAD);
@@ -94,7 +95,7 @@ public class FunCommandHandler extends BaseCommand {
     }
 
     @CommandAlias("iteminfo|ii") @CommandPermission("Xiavic.player.iteminfo")
-    public void showItemInfo(@NotNull final Player player) {
+    public void showItemInfo(Player player) {
         Utils.chat(player, " ");
         final PlayerInventory inventory = player.getInventory();
         final ItemStack inHand = inventory.getItemInMainHand();
@@ -149,29 +150,38 @@ public class FunCommandHandler extends BaseCommand {
         }
 
         if (meta instanceof BlockDataMeta) {
-            showBlockDataInfo(player, (BlockDataMeta) meta, inHand.getType().createBlockData()
-                .getMaterial()); //Get the material of a "wood be" block data.
+            showBlockDataInfo(player, (BlockDataMeta) meta, inHand.getType().createBlockData().getMaterial()); //Get the material of a "wood be" block data.
         }
     }
 
     @CommandAlias("nearby") @CommandPermission("Xiavic.player.nearby")
-    public void showNearbyPlayers(@NotNull final Player player) {
+    public void showNearbyPlayers(Player player) {
         final double radius = Main.mainConfig.getDouble("NearRadius");
-        List<String> nearbyPlayers = Bukkit.getOnlinePlayers().stream().filter(target -> {
-            double distance = player.getLocation().distance(target.getLocation());
-            return distance <= radius;
-        }).map(target -> "    " + target.getName() + ": " + player.getLocation()
-            .distance(target.getLocation()) + "m").collect(Collectors.toList());
-        if (!nearbyPlayers.isEmpty()) {
-            Utils.chat(player, "List of nearby players:");
-            for (String s : nearbyPlayers) {
-                Utils.chat(player, s);
+        if (player.hasPermission("Near") || player.isOp()) {
+            boolean found = false;
+            ArrayList<String> nearbyPlayers = new ArrayList<>();
+            for (Player target : Bukkit.getOnlinePlayers()) {
+                double distance = player.getLocation().distance(target.getLocation());
+                if (distance <= radius) {
+                    found = true;
+                    nearbyPlayers.add("    " + target.getName() + ": " + distance + "m");
+                }
             }
+            if (found) {
+                Utils.chat(player, "List of nearby players:");
+                for (String s : nearbyPlayers) {
+                    Utils.chat(player, s);
+                }
+            } else {
+                Utils.chat(player, "No players are nearby!");
+            }
+        } else {
+            Utils.chat(player, Main.messages.getString("NoPerms"));
         }
     }
 
     @CommandAlias("top") @CommandPermission("Xiavic.player.top")
-    public void goTop(final Player player) {
+    public void goTop(Player player) {
         final Location highestBlock =
             player.getWorld().getHighestBlockAt(player.getLocation()).getLocation();
         final Location current = player.getLocation();
@@ -185,6 +195,11 @@ public class FunCommandHandler extends BaseCommand {
         PaperLib.teleportAsync(player, highestBlock);
 
     }
+
+    /*
+        Helper Methods are found below. All Commands should and are above
+        this header. If the command is below, we need to move it.
+     */
 
     private void showSkullInfo(@NotNull final CommandSender sender,
         @NotNull final SkullMeta skullMeta) {
