@@ -4,6 +4,7 @@ import com.github.xiavic.essentials.Main;
 import com.github.xiavic.essentials.Utils.messages.Message;
 import com.github.xiavic.essentials.Utils.messages.Messages;
 import com.github.xiavic.lib.teleport.ITeleportHandler;
+import jdk.jfr.internal.LogLevel;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.bungeecord.BungeeCordComponentSerializer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -15,12 +16,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 
 public class Utils {
 
@@ -108,6 +112,8 @@ public class Utils {
             recipient.sendMessage(prefixedMessage);
         }
     }
+
+
 
     public static void sendMessage(@NotNull final CommandSender recipient,
         @NotNull final Message message, @NotNull final String... replacements) {
@@ -208,4 +214,38 @@ public class Utils {
         player.teleport(location);
         chat(player, Main.messages.getString(messagePath));
     }
+
+
+
+    /*
+        This is not a Internationalization (I18N) / Locales capitalize friendly way of hanlding
+        messages, if we want to support a translatable languiage file, then we should stick to
+        a method of using Internationalization (I18N) / Locales API from ACF to best ensure we
+        have muiltiple language support.
+
+        Personally we should worry about this when the plugin is more public and has more
+        customimizable features. For now let contributors provide translations.
+    */
+
+    public static void sendMessage(CommandSender recipient, String messagesKey, String... replacements) {
+        String replacedMessage = format(Main.messages.getString(messagesKey), replacements);
+        if (replacedMessage.isEmpty()) {
+            Main.getPlugin(Main.class).getLogger().log(Level.WARNING, "Formatting of Message, has failed!");
+        }
+
+        if (replacedMessage.contains("<") && replacedMessage.contains(">")) {
+            if (replacedMessage.contains(ChatColor.COLOR_CHAR + "")) {
+                final Component fixedMessage = BungeeCordComponentSerializer.legacy().deserialize(TextComponent.fromLegacyText(replacedMessage));
+                recipient.spigot().sendMessage(BungeeCordComponentSerializer.legacy().serialize(fixedMessage));
+            } else {
+                recipient.spigot().sendMessage(BungeeCordComponentSerializer.legacy().serialize(BungeeCordComponentSerializer.legacy().deserialize(TextComponent.fromLegacyText(replacedMessage))));
+            }
+        } else {
+            recipient.sendMessage(ChatColor.translateAlternateColorCodes('&', replacedMessage));
+        }
+
+    }
+
+
+
 }

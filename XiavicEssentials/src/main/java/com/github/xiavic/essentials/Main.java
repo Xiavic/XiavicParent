@@ -34,14 +34,13 @@ import de.leonhard.storage.internal.settings.ReloadSettings;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.ServicePriority;
-import org.bukkit.plugin.ServicesManager;
+import org.bukkit.plugin.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.*;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 
@@ -58,6 +57,7 @@ public final class Main extends JavaPlugin {
     public static NMS nmsImpl; //Should never be null after plugin init has completed.
     private static Main instance;
     private BukkitCommandManager commandManager;
+
 
     // Handle Instance of plugin in multiple classes.
     public static Main getInstance() {
@@ -152,7 +152,7 @@ public final class Main extends JavaPlugin {
         Objects.requireNonNull(getCommand(Main.commands.getString("Pony"))).setExecutor(new PonyCommand());
         Objects.requireNonNull(getCommand(Main.commands.getString("Sudo"))).setExecutor(new SudoCommand());
         Objects.requireNonNull(getCommand(Main.commands.getString("Vanish"))).setExecutor(new VanishCommand());
-        Objects.requireNonNull(getCommand(Main.commands.getString("World"))).setExecutor(new WorldCommand());
+        // Objects.requireNonNull(getCommand(Main.commands.getString("World"))).setExecutor(new WorldCommand());
 
         //Modern Commands:
         new LinksCommandHandler(commandManager);
@@ -173,12 +173,14 @@ public final class Main extends JavaPlugin {
         AFKHandler.INSTANCE.registerTicker();
         pm.registerEvents(new MiscHandler(), this);
         pm.registerEvents(nmsImpl.getSignEditor(), this);
+        pm.registerEvents(new ChatEvent(), this);
         //pm.registerEvents(new Databases(), this);
     }
 
     // Use this function for creating new shit
     private void registerShit() {
         tpaHandler = new TpaHandler();
+        tpaHandler.loadTeleportHandler();
         teleportHandler = new TeleportHandler();
     }
 
@@ -212,26 +214,13 @@ public final class Main extends JavaPlugin {
         serviceManager.register(InventorySerializer.class, nmsImpl.getInventorySerializer(), this,
                 ServicePriority.Low);
         //Register Teleport handlers
-        serviceManager
-                .register(ITeleportHandler.class, new TeleportHandler(), this, ServicePriority.Low);
-        serviceManager
-                .register(ITeleportRequestHandler.class, new TpaHandler(), this, ServicePriority.Low);
+        serviceManager.register(ITeleportHandler.class, new TeleportHandler(), this, ServicePriority.Low);
+        serviceManager.register(ITeleportRequestHandler.class, new TpaHandler(), this, ServicePriority.Low);
         //
     }
 
     // Handling of configuration file with Json, Yaml, and Toml
     private void setupStorage() {
-
-        ////////////////
-        // permissions.yml
-        ////////////////
-        permissions =
-                LightningBuilder.fromFile(new File("plugins/XiavicCore/Resources/permissions"))
-                        .addInputStreamFromResource("permissions.yml")
-                        .setConfigSettings(ConfigSettings.PRESERVE_COMMENTS)
-                        .setReloadSettings(ReloadSettings.AUTOMATICALLY)
-                        .setDataType(DataType.SORTED)
-                        .createConfig();
 
         ////////////////
         // messages.yml
