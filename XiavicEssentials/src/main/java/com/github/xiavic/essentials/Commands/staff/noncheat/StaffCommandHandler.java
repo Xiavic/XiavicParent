@@ -3,6 +3,7 @@ package com.github.xiavic.essentials.Commands.staff.noncheat;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.BukkitCommandManager;
 import co.aikar.commands.annotation.*;
+import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import com.github.xiavic.essentials.Main;
 import com.github.xiavic.essentials.Utils.Utils;
 import com.github.xiavic.essentials.Utils.messages.CommandMessages;
@@ -63,20 +64,27 @@ import org.jetbrains.annotations.NotNull;
             Main.getPlugin(Main.class).getDescription().getVersion());
     }
 
-    @Default @CommandAlias("feed") @CommandPermission("Xiavic.staff.feed")
-    public void feed(final Player player) {
-        player.setFoodLevel(20);
-        player.setSaturation(20);
-        Utils.sendMessage(player, commandMessages.messagePlayerFed);
-    }
+    @Default @CommandAlias("feed") @CommandPermission("Xiavic.staff.feed") @CommandCompletion("@players")
+    public void feed(final Player player, @Optional OnlinePlayer otherPlayer) {
 
-    @Default @CommandAlias("feed") @CommandPermission("Xiavic.staff.feedothers")
-    @CommandCompletion("@players") public void feed(final CommandSender sender, Player target) {
-        feed(target);
-        if (sender != target) {
-            Utils.sendMessage(sender, commandMessages.messagePlayerFedOther, "%target%",
-                target.getDisplayName());
+        if (otherPlayer != null) {
+
+            if (player.hasPermission("Xiavic.staff.feedothers")) {
+
+                otherPlayer.player.setFoodLevel(20);
+                otherPlayer.player.setSaturation(20);
+                Utils.sendMessage(player, commandMessages.messagePlayerFedOther, "%target%", otherPlayer.getPlayer().getDisplayName());
+                Utils.sendMessage(otherPlayer.player, commandMessages.messagePlayerFed);
+            }
+
+        } else {
+
+            player.setFoodLevel(20);
+            player.setSaturation(20);
+            Utils.sendMessage(player, commandMessages.messagePlayerFed);
+
         }
+
     }
 
     @Default @CommandAlias("setfirstspawn") @CommandPermission("Xiavic.staff.setfirstspawn")
@@ -104,20 +112,18 @@ import org.jetbrains.annotations.NotNull;
     }
 
     @Default @CommandAlias("fly") @CommandPermission("Xiavic.staff.fly")
-    public void toggleFly(final Player player) {
-        player.setAllowFlight(!player.getAllowFlight());
-        player.setFlying(!player.isFlying());
-        Utils.sendMessage(player, commandMessages.messagePlayerFly, "%mode%",
-            player.getAllowFlight() ? "&cenabled" : "&cdisabled");
-    }
-
-    @Default @CommandAlias("fly") @CommandPermission("Xiavic.staff.flyothers")
-    @CommandCompletion("@players")
-    public void toggleFly(final CommandSender sender, final Player target) {
-        toggleFly(target);
-        Utils.sendMessage(sender, commandMessages.messagePlayerFlyOther, "%target%",
-            target.getDisplayName(), "%mode%",
-            target.getAllowFlight() ? "&cenabled" : "&cdisabled");
+    public void toggleFly(final Player player, @Optional OnlinePlayer otherplayer) {
+        if (otherplayer != null) {
+            if (player.hasPermission("Xiavic.staff.flyothers")) {
+                otherplayer.player.setAllowFlight(!otherplayer.player.getAllowFlight());
+                otherplayer.player.setFlying(!otherplayer.player.isFlying());
+                Utils.sendMessage(otherplayer.player, commandMessages.messagePlayerFlyOther, "%target%", otherplayer.player.getDisplayName(), "%mode%", otherplayer.player.getAllowFlight() ? "&cenabled" : "&cdisabled");
+            }
+        } else {
+            player.setAllowFlight(!player.getAllowFlight());
+            player.setFlying(!player.isFlying());
+            Utils.sendMessage(player, commandMessages.messagePlayerFly, "%mode%", player.getAllowFlight() ? "&cenabled" : "&cdisabled");
+        }
     }
 
     @Default @CommandAlias("flyspeed") @CommandCompletion("1 2 3 4 5 6 7 8 9 10")
@@ -157,25 +163,36 @@ import org.jetbrains.annotations.NotNull;
 
     }
 
-    @Default @CommandAlias("heal") @CommandPermission("Xiavic.staff.heal")
-    public void doHeal(final Player player) {
-        player.setHealth(20);
-        player.setSaturation(20);
-        player.setFoodLevel(20);
-        Utils.sendMessage(player, commandMessages.messagePlayerHealed);
+    @Default @CommandAlias("heal") @CommandPermission("Xiavic.staff.heal") @CommandCompletion("@players")
+    public void doHeal(final Player player, @Optional OnlinePlayer otherplayer) {
+        if (otherplayer != null) {
+            if (player.hasPermission("Xiavic.staff.healothers")) {
+
+                otherplayer.player.setHealth(20);
+                otherplayer.player.setSaturation(20);
+                otherplayer.player.setFoodLevel(20);
+                Utils.sendMessage(otherplayer.player, commandMessages.messagePlayerHealed);
+                Utils.sendMessage(player, "commands.heal-other");
+
+            }
+        } else {
+
+            player.setHealth(20);
+            player.setSaturation(20);
+            player.setFoodLevel(20);
+            Utils.sendMessage(player, commandMessages.messagePlayerHealed);
+
+        }
     }
 
-    @Default @CommandAlias("heal") @CommandPermission("Xiavic.staff.healothers")
-    public void doHeal(final CommandSender sender, final Player player) {
-        doHeal(player);
-        Utils.sendMessage(sender, commandMessages.messagePlayerHealedOther, "%target%",
-            player.getDisplayName());
-    }
 
     @Default @CommandAlias("healall") @CommandPermission("Xiavic.staff.healall")
     public void doMassHeal(final CommandSender sender) {
         for (final Player player : Bukkit.getOnlinePlayers()) {
-            doHeal(player);
+            player.setHealth(20);
+            player.setSaturation(20);
+            player.setFoodLevel(20);
+            Utils.sendMessage(player, commandMessages.messagePlayerHealed);
         }
         Utils.sendMessage(sender, commandMessages.messageAllPlayersHealed);
     }
@@ -196,23 +213,19 @@ import org.jetbrains.annotations.NotNull;
             String.valueOf(speed));
     }
 
-    @Default @CommandAlias("whois") @CommandPermission("Xiavic.player.realname")
-    public void showRealName(final CommandSender sender, final Player player) {
-        Utils.sendMessage(sender, commandMessages.messageWhoIsPlayer, "%nickname%",
-            player.getDisplayName(), "%username%", player.getName());
-        if (player.hasPermission(Main.permissions.getString("Whois"))) {
-            final Location loc = player.getLocation();
-            Utils.chat(player, "&6Player UUID: &9" + player.getUniqueId(),
-                "&6Exp: &9" + player.getTotalExperience() + "&6, Next Level: &9" + player
-                    .getExpToLevel(),
-                "&6Health: &9" + player.getHealth() + "&6, Food: &9" + player.getFoodLevel(),
-                "&6Time: &9" + player.getPlayerTime(),
-                "&6Location: &9" + player.getWorld().getName().toUpperCase() + " | &cX &9" + loc
-                    .getBlockX() + " | &cY &9" + loc.getBlockY() + " | &cZ &9" + loc.getBlockZ(),
-                "&6Gamemode: &9" + player.getGameMode() + "&6, Can Fly: &9" + player
-                    .getAllowFlight(),
-                "&6First Joined: &9" + player.getFirstPlayed() + "&6, Last Played: &9" + player
-                    .getLastSeen());
-        }
+    // Rewrite This Crap
+    @Default @CommandAlias("whois") @CommandPermission("Xiavic.player.realname") 
+    public void showRealName(final CommandSender sender, final OnlinePlayer otherplayer) {
+
+        Utils.sendMessage(sender, commandMessages.messageWhoIsPlayer, "%nickname%", otherplayer.player.getDisplayName(), "%username%", otherplayer.player.getName());
+        final Location loc = otherplayer.player.getLocation();
+        Utils.chat(sender,
+                "&6Player UUID: &9" + otherplayer.player.getUniqueId(),
+                "&6Exp: &9" + otherplayer.player.getTotalExperience() + "&6, Next Level: &9" + otherplayer.player.getExpToLevel(),
+                "&6Health: &9" + otherplayer.player.getHealth() + "&6, Food: &9" + otherplayer.player.getFoodLevel(),
+                "&6Time: &9" + otherplayer.player.getPlayerTime(),
+                "&6Location: &9" + otherplayer.player.getWorld().getName().toUpperCase() + " | &cX &9" + loc.getBlockX() + " | &cY &9" + loc.getBlockY() + " | &cZ &9" + loc.getBlockZ(),
+                "&6Gamemode: &9" + otherplayer.player.getGameMode() + "&6, Can Fly: &9" + otherplayer.player.getAllowFlight(),
+                "&6First Joined: &9" + otherplayer.player.getFirstPlayed() + "&6, Last Played: &9" + otherplayer.player.getLastSeen());
     }
 }
