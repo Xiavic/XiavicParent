@@ -94,10 +94,11 @@ import java.util.concurrent.TimeUnit;
         teleportHandler.teleportToPlayer(sender, otherPlayer.player, true);
     }
 
-    @Subcommand("teleportposition|tppos") @CommandPermission("Xiavic.staff.tppos")
-    public void doTeleportPosition(Player sender, double x, double y, double z) {
-        World world = sender.getWorld();
-        teleportHandler.teleportToLocation(sender, new Location(world, x, y, z));
+    @CommandAlias("teleportposition|tppos") @CommandPermission("Xiavic.staff.tppos")
+    public void doTeleportPosition(Player player, double x, double y, double z) {
+        World world = player.getWorld();
+        teleportHandler.teleportToLocation(player, new Location(world, x, y, z));
+        Utils.sendMessage(player,"teleport.teleportpos", "%x%", Double.toString(x), "%y%", Double.toString(y), "%z%", Double.toString(z));
     }
 
 }

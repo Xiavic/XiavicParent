@@ -21,16 +21,16 @@ public class PonyCommand implements CommandExecutor {
             ChatColor.DARK_BLUE,
             ChatColor.DARK_PURPLE,};
     private static final String[] ponies = {
-            Utils.chat("&fRarity is best pony!"),
-            Utils.chat("&6AppleJack is best pony!"),
-            Utils.chat("&eFluttershy is best pony"),
-            Utils.chat("&eFlutterBitch is best bitch."),
-            Utils.chat("&eFlutterHurricane!!!!!!!!1"),
-            Utils.chat("&5Twilight sparkle is best pony!"),
-            Utils.chat("&1Luna is best pony!"),
-            Utils.chat("&dand then I said, OATMEAL?! ARE YOU CRAZY -Pinkie Pie"),
-            rainbowizeString("RainbowDash") + Utils.chat(" &9is best pony"),
-            Utils.chat("&eDerpyHooves is derpy..."),
+            Utils.convertLegacyCColor("&fRarity is best pony!"),
+            Utils.convertLegacyCColor("&6AppleJack is best pony!"),
+            Utils.convertLegacyCColor("&eFluttershy is best pony"),
+            Utils.convertLegacyCColor("&eFlutterBitch is best bitch."),
+            Utils.convertLegacyCColor("&eFlutterHurricane!!!!!!!!1"),
+            Utils.convertLegacyCColor("&5Twilight sparkle is best pony!"),
+            Utils.convertLegacyCColor("&1Luna is best pony!"),
+            Utils.convertLegacyCColor("&dand then I said, OATMEAL?! ARE YOU CRAZY -Pinkie Pie"),
+            rainbowizeString("RainbowDash") + Utils.convertLegacyCColor(" &9is best pony"),
+            Utils.convertLegacyCColor("&eDerpyHooves is derpy..."),
             rainbowizeString("SONIC RAINBOOM"),
             rainbowizeString("ATOMIC RAINBOOM"),
             rainbowizeString("RAINBOW FIRE TRAIL!"),
@@ -57,9 +57,9 @@ public class PonyCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender player, Command command, String label, String[] args) {
         if (player.hasPermission("Xiavic.user.pony")) {
-            player.sendMessage(Utils.chat(Main.messages.getString("commands.pony")).replace("%Random_Pony%", ponies[r.nextInt(ponies.length)]).replace("%PonyPerson%", Utils.chat(rainbowizeString(Main.messages.getString("PonyPerson")))));
+            player.sendMessage(Utils.convertLegacyCColor(Main.messages.getString("commands.pony")).replace("%Random_Pony%", ponies[r.nextInt(ponies.length)]).replace("%PonyPerson%", Utils.convertLegacyCColor(rainbowizeString(Main.messages.getString("PonyPerson")))));
         } else {
-            player.sendMessage(Utils.chat(Main.messages.getString("NoPerms")));
+            player.sendMessage(Utils.convertLegacyCColor(Main.messages.getString("NoPerms")));
         }
         return true;
     }

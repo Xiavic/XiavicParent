@@ -4,6 +4,7 @@ import com.github.xiavic.essentials.Main;
 import com.github.xiavic.essentials.Utils.messages.Message;
 import com.github.xiavic.essentials.Utils.messages.Messages;
 import com.github.xiavic.lib.teleport.ITeleportHandler;
+import io.papermc.lib.PaperLib;
 import jdk.jfr.internal.LogLevel;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.bungeecord.BungeeCordComponentSerializer;
@@ -26,55 +27,12 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
 
     private static final Messages messages = Messages.INSTANCE;
-    private static ITeleportHandler teleportHandler;
-
-    public static void loadTeleportHandler() {
-        RegisteredServiceProvider<ITeleportHandler> rsp =
-            Bukkit.getServicesManager().getRegistration(ITeleportHandler.class);
-        if (rsp != null) {
-            teleportHandler = rsp.getProvider();
-        }
-    }
-    //EZ Chat Colors
-
-    public static String chat(String s) {
-        return ChatColor.translateAlternateColorCodes('&', s);
-    }
-
-    // Sends messages to a player directly and makes the 'chat' name make more sense
-    public static void chat(CommandSender player, String... strings) {
-        for (String string : strings) {
-            player.sendMessage(chat(string));
-        }
-    }
-
-    public static String capitalize(@NotNull final String s) {
-        if (s.isEmpty()) {
-            return s;
-        }
-        return s.substring(0, 1).toUpperCase() + s.substring(1);
-    }
-
-    ;
-
-    public static String titleCase(@NotNull final String delimiter, @NotNull final String s) {
-        if (s.isEmpty()) {
-            return s;
-        }
-        final String[] split = s.split(delimiter);
-        if (split.length == 0) {
-            return s;
-        }
-        final StringBuilder builder = new StringBuilder(delimiter);
-        for (String s1 : split) {
-            builder.append(capitalize(s1));
-        }
-        return builder.toString();
-    }
 
     /**
      * Send a message to a recipient.
@@ -85,6 +43,7 @@ public class Utils {
      * @param replacements Replacements
      * @see #format(String, String...) for information about string replacements
      */
+    @Deprecated
     public static void sendPrefixedMessage(@NotNull final CommandSender recipient,
         @NotNull final Message message, @NotNull final String... replacements) {
         Objects.requireNonNull(recipient);
@@ -113,8 +72,6 @@ public class Utils {
             recipient.sendMessage(prefixedMessage);
         }
     }
-
-
 
     public static void sendMessage(@NotNull final CommandSender recipient,
         @NotNull final Message message, @NotNull final String... replacements) {
@@ -163,12 +120,6 @@ public class Utils {
         return replacedMessage;
     }
 
-    // An overload so you can do the same thing when you need to send a message to console
-    // from inside a command class
-    public static void chat(CommandSender sender, String string) {
-        sender.sendMessage(chat(string));
-    }
-
     /**
      * Attempt to replace the currently held item to a new one. The old item will be moved to
      * the next empty slot.
@@ -202,20 +153,6 @@ public class Utils {
         final Server server = Bukkit.getServer();
         return server.getClass().getPackage().getName().replace("org.bukkit.craftbukkit", "");
     }
-
-//    @Deprecated public static void teleport(Player player, Location location) {
-//        teleportHandler.processPlayerTeleport(player);
-//        player.teleport(location);
-//    }
-//
-//    // This teleport method lets you send a message to the player here instead of
-//    // having to do it where ever you called this method
-//    @Deprecated public static void teleport(Player player, Location location, String messagePath) {
-//        teleportHandler.processPlayerTeleport(player);
-//        player.teleport(location);
-//        chat(player, Main.messages.getString(messagePath));
-//    }
-
 
 
     /*
@@ -252,15 +189,68 @@ public class Utils {
         Main.getPlugin(Main.class).getLogger().log(Level.WARNING, object.toString());;
     }
 
+
     /*
-        Teleportation Utils Version 1.0 by Devon & Kerlab
+       Minecraft Chat Based Utils
 
-            This contains certain utils that the rewritten Teleportation & TPRequests
-            system uses. Do not modify the code below unless you can the methods in
-            TpaHandler & TeleportationHandler.
+           This will handle the formatting and displaying of the chat based
+           portion of our plugin. Most of the functions here should be standard
+           to the Utils.
+    */
 
-     */
+    public static String convertLegacyCColor(String message) {
+        return ChatColor.translateAlternateColorCodes('&', message);
+    }
 
+    public static String convertRGBColor(String message) {
+        if (!Bukkit.getVersion().contains("1.16")) return convertLegacyCColor(message);
+
+        Pattern pattern = Pattern.compile("`[a-fA-F0-9]{5}");
+        Matcher match = pattern.matcher(message);
+        while (match.find()) {
+            message = message.replace("`", "");
+            String color = message.substring(match.start(), match.end());
+            message = message.replace(color, net.md_5.bungee.api.ChatColor.of("#" + color) + "");
+            match = pattern.matcher(message);
+        }
+        return ChatColor.translateAlternateColorCodes('&', message);
+
+
+    }
+
+    public static String capitializeString(String message) {
+        if (message.isEmpty()) { return message; }
+        return message.substring(0, 1).toUpperCase() + message.substring(1);
+    }
+
+    public static String toTitleCase(String delimiter, String message) {
+        if (message.isEmpty()) return message;
+        String[] words = message.split(delimiter);
+        if (words.length == 0) return message;
+
+        StringBuilder builder = new StringBuilder(delimiter);
+        for (String word : words) {
+            builder.append(capitializeString(word));
+        }
+        return builder.toString();
+    }
+
+    @Deprecated
+    public static void chat(CommandSender player, String... strings) {
+        sendLegecyMessage(player, strings);
+    }
+
+    @Deprecated
+    public static void sendLegecyMessage(CommandSender player, String... strings) {
+        for (String string : strings) {
+            player.sendMessage(convertLegacyCColor(string));
+        }
+    }
+
+    @Deprecated
+    public static String titleCase(@NotNull final String delimiter, @NotNull final String s) {
+        return toTitleCase(delimiter, s);
+    }
 
 
 }

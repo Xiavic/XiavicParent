@@ -106,6 +106,7 @@ teleport:
   no-previous-location: "You do not have a recent location to go back to"
   no-pending-requests: "You do not have any teleport requests..."
   teleported-world: "&bYou have been teleported to the spawn of %world%"
+  teleportpos: "`ff8c00You have been teleported to %x%, %y%, %z%!" # Attempting to Embed RGB in Message.yml
 
 
 # utils.Listeners

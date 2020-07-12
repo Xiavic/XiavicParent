@@ -187,7 +187,7 @@ public final class Main extends JavaPlugin {
             if (NMSVersion.getCurrent().isOlderThan(NMSVersion.v1_14_R1)) { //We only support 1.14 and onwards.
                 final String message = messages_new.messageUnsupportedServerVersion.toString();
                 getLogger().log(Level.SEVERE,
-                    Utils.chat(message.replace("%version%", Bukkit.getVersion())));
+                    Utils.convertLegacyCColor(message.replace("%version%", Bukkit.getVersion())));
                 return false;
             }
             try {
@@ -197,7 +197,7 @@ public final class Main extends JavaPlugin {
                 Main.nmsImpl = nmsImplClass.getDeclaredConstructor().newInstance();
             } catch (final ReflectiveOperationException ex) {
                 ex.printStackTrace();
-                getLogger().log(Level.SEVERE, Utils.chat("&cFailed to register NMS implementation! See error above."));
+                getLogger().log(Level.SEVERE, Utils.convertLegacyCColor("&cFailed to register NMS implementation! See error above."));
                 return false;
             }
         }
