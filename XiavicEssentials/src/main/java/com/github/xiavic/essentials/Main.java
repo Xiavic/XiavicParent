@@ -3,27 +3,29 @@ package com.github.xiavic.essentials;
 // import com.github.xiavic.essentials.Utils.Misc.Databases;
 
 import co.aikar.commands.*;
-import com.github.xiavic.essentials.Commands.player.Essential.*;
-import com.github.xiavic.essentials.Commands.player.Essential.Teleport.TeleportationCommandHandler;
-import com.github.xiavic.essentials.Commands.player.Fun.*;
-import com.github.xiavic.essentials.Commands.player.Fun.Links.LinksCommandHandler;
-import com.github.xiavic.essentials.Commands.staff.cheats.CheatArmor;
-import com.github.xiavic.essentials.Commands.staff.cheats.CheatEXP;
-import com.github.xiavic.essentials.Commands.staff.noncheat.*;
-import com.github.xiavic.essentials.Commands.staff.noncheat.teleport.StaffTeleportCommandHandler;
+import com.github.xiavic.essentials.commands.player.Essential.*;
+import com.github.xiavic.essentials.commands.player.Essential.Teleport.TeleportationCommandHandler;
+import com.github.xiavic.essentials.commands.player.Essential.WarpCommandHandler;
+import com.github.xiavic.essentials.commands.player.Fun.*;
+import com.github.xiavic.essentials.commands.player.FunCommandHandler;
+import com.github.xiavic.essentials.commands.player.LinksCommandHandler;
+import com.github.xiavic.essentials.commands.staff.cheats.CheatArmor;
+import com.github.xiavic.essentials.commands.staff.cheats.CheatEXP;
+import com.github.xiavic.essentials.commands.staff.noncheat.*;
+import com.github.xiavic.essentials.commands.staff.noncheat.teleport.StaffTeleportCommandHandler;
 import com.github.xiavic.essentials.Utils.CommandBooleanValue;
 import com.github.xiavic.essentials.Utils.EquipAnything.EquipEvents;
-import com.github.xiavic.essentials.Utils.Listeners.*;
-import com.github.xiavic.essentials.Utils.Teleportation.TeleportationHandler;
-import com.github.xiavic.essentials.Utils.Teleportation.TpaHandler;
+import com.github.xiavic.essentials.Utils.handlers.teleportation.TeleportationHandler;
+import com.github.xiavic.essentials.Utils.handlers.teleportation.TpaHandler;
 import com.github.xiavic.essentials.Utils.Utils;
+import com.github.xiavic.essentials.Utils.events.*;
 import com.github.xiavic.essentials.Utils.messages.Messages;
+import com.github.xiavic.essentials.Utils.warp.PrivateWarpManager;
+import com.github.xiavic.essentials.Utils.warp.WarpManager;
 import com.github.xiavic.lib.NMSHandler.NMS;
 import com.github.xiavic.lib.NMSHandler.NMSVersion;
 import com.github.xiavic.lib.inventory.InventorySerializer;
 import com.github.xiavic.lib.signedit.ISignEditor;
-import com.github.xiavic.lib.teleport.ITeleportHandler;
-import com.github.xiavic.lib.teleport.ITeleportRequestHandler;
 import de.leonhard.storage.LightningBuilder;
 import de.leonhard.storage.Yaml;
 import de.leonhard.storage.internal.settings.ConfigSettings;
@@ -54,6 +56,9 @@ public final class Main extends JavaPlugin {
     public static NMS nmsImpl; //Should never be null after plugin init has completed.
     private static Main instance;
     private BukkitCommandManager commandManager;
+
+    private static WarpManager warpMan;
+    private static PrivateWarpManager pWarpMan;
 
 
     // Handle Instance of plugin in multiple classes.
@@ -158,6 +163,7 @@ public final class Main extends JavaPlugin {
         new FunCommandHandler(commandManager);
         new StaffTeleportCommandHandler(commandManager, teleportHandler);
         new StaffCommandHandler(commandManager);
+        commandManager.registerCommand(new WarpCommandHandler());
 
     }
 
@@ -167,7 +173,7 @@ public final class Main extends JavaPlugin {
         pm.registerEvents(new EquipEvents(), this);
         pm.registerEvents(new RespawnEvent(), this);
         // pm.registerEvents(teleportHandler, this); // What Events was this?
-        AFKHandler.INSTANCE.registerTicker();
+        pm.registerEvents(new AFKEvents(), this);
         pm.registerEvents(new MiscHandler(), this);
         pm.registerEvents(nmsImpl.getSignEditor(), this);
         pm.registerEvents(new ChatEvent(), this);

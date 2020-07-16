@@ -73,6 +73,7 @@ public class Utils {
         }
     }
 
+    @Deprecated
     public static void sendMessage(@NotNull final CommandSender recipient,
         @NotNull final Message message, @NotNull final String... replacements) {
         Objects.requireNonNull(recipient);
@@ -172,21 +173,24 @@ public class Utils {
             Main.getPlugin(Main.class).getLogger().log(Level.SEVERE, messagesKey);
         }
 
-        if (replacedMessage.contains("<") && replacedMessage.contains(">")) {
-            if (replacedMessage.contains(ChatColor.COLOR_CHAR + "")) {
-                final Component fixedMessage = BungeeCordComponentSerializer.legacy().deserialize(TextComponent.fromLegacyText(replacedMessage));
-                recipient.spigot().sendMessage(BungeeCordComponentSerializer.legacy().serialize(fixedMessage));
-            } else {
-                recipient.spigot().sendMessage(BungeeCordComponentSerializer.legacy().serialize(BungeeCordComponentSerializer.legacy().deserialize(TextComponent.fromLegacyText(replacedMessage))));
-            }
-        } else {
-            recipient.sendMessage(ChatColor.translateAlternateColorCodes('&', replacedMessage));
-        }
+        recipient.sendMessage(convertRGBColor(replacedMessage));
 
     }
 
     public static void debugLog(Object object) {
         Main.getPlugin(Main.class).getLogger().log(Level.WARNING, object.toString());;
+    }
+
+    /*
+        Location Utils
+
+            This section of the utils will hanlde all Locations based
+            methods used inside of commands.
+
+     */
+    public static boolean areCordsEqual(Location primary, Location secondary) {
+        return primary.getWorld() == secondary.getWorld() && primary.getX() == secondary.getX()
+                && primary.getY() == secondary.getY() && primary.getZ() == secondary.getZ();
     }
 
 
@@ -204,18 +208,17 @@ public class Utils {
 
     public static String convertRGBColor(String message) {
         if (!Bukkit.getVersion().contains("1.16")) return convertLegacyCColor(message);
+        if (message == null) { debugLog("Sorry, RGB Support failed in Utils."); return ""; }
 
-        Pattern pattern = Pattern.compile("`[a-fA-F0-9]{5}");
+        Pattern pattern = Pattern.compile("(`[a-fA-F0-9]{6})");
         Matcher match = pattern.matcher(message);
         while (match.find()) {
-            message = message.replace("`", "");
             String color = message.substring(match.start(), match.end());
-            message = message.replace(color, net.md_5.bungee.api.ChatColor.of("#" + color) + "");
+            message = message.replace(color, net.md_5.bungee.api.ChatColor.of(color) + "");
             match = pattern.matcher(message);
         }
-        return ChatColor.translateAlternateColorCodes('&', message);
 
-
+        return convertLegacyCColor(message);
     }
 
     public static String capitializeString(String message) {
@@ -237,11 +240,11 @@ public class Utils {
 
     @Deprecated
     public static void chat(CommandSender player, String... strings) {
-        sendLegecyMessage(player, strings);
+        sendLegacyMessage(player, strings);
     }
 
     @Deprecated
-    public static void sendLegecyMessage(CommandSender player, String... strings) {
+    public static void sendLegacyMessage(CommandSender player, String... strings) {
         for (String string : strings) {
             player.sendMessage(convertLegacyCColor(string));
         }

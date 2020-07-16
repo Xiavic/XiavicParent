@@ -109,6 +109,11 @@ teleport:
   teleportpos: "`ff8c00You have been teleported to %x%, %y%, %z%!" # Attempting to Embed RGB in Message.yml
 
 
+warps:
+  list: "`eb8034Warps:\n%list%"
+  already-exists: "`eb8034Sorry, We could not create that warp cause it already exists!"
+  successfully-created: "`eb8034Created Warp!"
+
 # utils.Listeners
 commands:
   inventory-clear: "&7Your inventory has just been cleared. Hopefully you didn't have any God-like items on you!"
