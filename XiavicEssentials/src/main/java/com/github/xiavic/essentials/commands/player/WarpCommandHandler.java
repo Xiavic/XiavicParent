@@ -30,38 +30,38 @@ public class WarpCommandHandler extends BaseCommand {
     }
 
     @Default
-    @Subcommand("use") @CommandPermission("xiavic.warps.use") @CommandCompletion("@publicwarps")
+    @Subcommand("use") @CommandPermission("xiavic.warps.use") @CommandCompletion("@enabledPublicWarps")
     public void onWarpuse(Player player, String warpName) {
-        if (warpName == null) { Utils.sendMessage(player, "warp.invalid-warp"); return; }
+        if (warpName == null) { Utils.sendMessage(player, "warps.invalid-warp"); return; }
         if (!WarpManager.getAllWarpNames().contains(warpName)) { Utils.sendMessage(player, "warp.invalid-warp"); return; }
 
         Warp localWarp = WarpManager.getWarp(warpName);
         assert localWarp != null;
-        if (!localWarp.isEnabled()) { Utils.sendMessage(player, "warp.warp-disabled"); return; }
-        if (!player.hasPermission("xiavic.warps." + localWarp.getPermission())) { Utils.sendMessage(player, "warp.no-permission"); return; }
+        if (!localWarp.isEnabled()) { Utils.sendMessage(player, "warps.warp-disabled"); return; }
+        if (!player.hasPermission("xiavic.warps." + localWarp.getPermission())) { Utils.sendMessage(player, "warps.no-permission"); return; }
         TeleportationHandler.processPTeleport(player);
         player.teleportAsync(localWarp.getLocation());
         // Send TP Message
-        Utils.sendMessage(player, "warp.successful-teleport");
+        Utils.sendMessage(player, "warps.successful-teleport", "%warp%", localWarp.getName().toUpperCase());
 
 
     }
 
-    @Subcommand("delete|remove") @CommandPermission("xiavic.warps.delete")
+    @Subcommand("delete|remove") @CommandPermission("xiavic.warps.delete") @CommandCompletion("@publicwarps")
     public void onDeleteWarp(Player player, String warpName) {
-        if (warpName == null) { Utils.sendMessage(player, "warp.invalid-warp"); return; }
-        if (!WarpManager.getAllWarpNames().contains(warpName)) { Utils.sendMessage(player, "warp.invalid-warp"); return; }
+        if (warpName == null) { Utils.sendMessage(player, "warps.invalid-warp"); return; }
+        if (!WarpManager.getAllWarpNames().contains(warpName)) { Utils.sendMessage(player, "warps.invalid-warp"); return; }
 
         Warp localWarp = WarpManager.getWarp(warpName);
         assert localWarp != null;
         switch (WarpManager.unregisterWarp(localWarp)) {
             case FAILED:
-                // sendFailedMessage
-                player.sendMessage("Yay! You failed again devon!");
+                // sendFailedMessage\
+                Utils.sendMessage(player, "warps.error-occurred");
                 break;
             case UNREGISTERED:
                 // send success message
-                player.sendMessage("Well Then! You didn't fail devon!");
+                Utils.sendMessage(player, "warps.warp-removed", "%warp%", localWarp.getName().toUpperCase());
                 break;
         }
 
@@ -69,20 +69,65 @@ public class WarpCommandHandler extends BaseCommand {
 
     @Subcommand("info") @CommandPermission("xiavic.warps.info") @CommandCompletion("@publicwarps")
     public void onWarpInfo(Player player, String warpName) {
-        if (warpName == null) { Utils.sendMessage(player, "warp.invalid-warp"); return; }
-        if (!WarpManager.getAllWarpNames().contains(warpName)) { Utils.sendMessage(player, "warp.invalid-warp"); return; }
+        if (warpName == null) { Utils.sendMessage(player, "warps.invalid-warp"); return; }
+        if (!WarpManager.getAllWarpNames().contains(warpName)) { Utils.sendMessage(player, "warps.invalid-warp"); return; }
 
         Warp localWarp = WarpManager.getWarp(warpName);
         assert localWarp != null;
 
-        // Print message of info
-        player.sendMessage(localWarp.getName() + " : " + localWarp.getPermission());
+        // Send the player information about the warp.
+        Utils.sendMessage(player, "warps.info", "%warpName%", Utils.capitializeString(localWarp.getName()),
+                "%permnode%", localWarp.getPermission(),
+                "%warpEnabled%", String.valueOf(localWarp.isEnabled()),
+                "%warpWorld%", localWarp.getLocation().getWorld().getName(),
+                "%warpX%", String.valueOf(localWarp.getLocation().getX()),
+                "%warpY%", String.valueOf(localWarp.getLocation().getY()),
+                "%warpZ%", String.valueOf(localWarp.getLocation().getZ())
+        );
 
     }
 
     @Subcommand("save|savewarps") @CommandPermission("xiavic.warps.saveall")
     public void onWarpSave (Player player) {
-        // TODO: Save to File with Format and Ability to parse that format back into plugin.
+        WarpManager.saveAllWarps();
+        player.sendMessage("RIP CHECK RESOURCES");
+    }
+
+    @Subcommand("load|loadwarps") @CommandPermission("xiavic.warps.loadall")
+    public void onWarpLoad (Player player) {
+        WarpManager.loadWarpsFromFile();
+        player.sendMessage("RIP NEW WARPS ADDED");
+    }
+
+    @Subcommand("edit") @CommandPermission("xiavic.warps.loadall") @CommandCompletion("@publicwarps @editTypes *")
+    public void onEditWarp (Player player, String warpName, String node, @Optional String value) {
+        Warp localWarp = WarpManager.getWarp(warpName);
+        assert localWarp != null;
+        switch (node) {
+            case "NAME":
+                if (value == null) { Utils.sendMessage(player, "warps.edit-failed"); break; }
+                localWarp.setName(value);
+                Utils.sendMessage(player, "warps.edit-success");
+                break;
+
+            case "PERM":
+                if (value == null) { Utils.sendMessage(player, "warps.edit-failed"); break; }
+                localWarp.setPermission(value);
+                Utils.sendMessage(player, "warps.edit-success");
+                break;
+
+            case "ENABLED":
+                if (value == null) { Utils.sendMessage(player, "warps.edit-failed"); break; }
+                localWarp.setEnabled(Boolean.parseBoolean(value));
+                Utils.sendMessage(player, "warps.edit-success");
+                break;
+
+            case "LOCATION":
+                localWarp.setLocation(player.getLocation().clone());
+                Utils.sendMessage(player, "warps.edit-success");
+                break;
+        }
+
     }
 
 }

@@ -1,4 +1,4 @@
-package com.github.xiavic.essentials.utils.events;
+package com.github.xiavic.essentials.events;
 
 import com.github.xiavic.essentials.utils.LocationUtils;
 import org.bukkit.event.EventHandler;

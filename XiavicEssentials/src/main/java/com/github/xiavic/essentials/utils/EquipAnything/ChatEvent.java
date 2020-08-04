@@ -1,4 +1,4 @@
-package com.github.xiavic.essentials.utils.events;
+package com.github.xiavic.essentials.utils.EquipAnything;
 
 import com.github.xiavic.essentials.utils.Utils;
 import org.bukkit.event.EventHandler;
