@@ -18,7 +18,7 @@ public class AFKEvents implements Listener {
 //    }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onMove(final PlayerMoveEvent event) {
+    public void onMove(PlayerMoveEvent event) {
         if (AFKHandler.isPlayerAFK(event.getPlayer()) == AFKState.NOTAFK) return;
         AFKHandler.toggleAFK(event.getPlayer());
     }
