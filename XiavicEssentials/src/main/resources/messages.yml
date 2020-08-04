@@ -81,6 +81,12 @@ messages:
   heads: "Heads"
   tails: "Tails"
 
+freeze:
+  been-frozen: "#f54b42You have been frozen by %staffMember%! #f5a442Please contact a staff member!"
+  been-unfrozen: "#f54b42You have been unfrozen by %staffMember%!"
+  froze-player: "#f54b42You have frozen %target%!"
+  unfroze-player: "#f54b42You have unfrozen %target%!"
+
 # TP
 teleport:
   forced-teleport: "You are being teleported!"

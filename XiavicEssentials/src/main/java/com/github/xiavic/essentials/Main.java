@@ -8,11 +8,10 @@ import com.github.xiavic.essentials.commands.staff.cheats.CheatArmor;
 import com.github.xiavic.essentials.commands.staff.cheats.CheatEXP;
 import com.github.xiavic.essentials.commands.staff.noncheat.FreezeCommand;
 import com.github.xiavic.essentials.commands.staff.noncheat.StaffCommandHandler;
-import com.github.xiavic.essentials.commands.staff.noncheat.SudoCommand;
-import com.github.xiavic.essentials.commands.staff.noncheat.VanishCommand;
 import com.github.xiavic.essentials.commands.staff.noncheat.teleport.StaffTeleportCommandHandler;
 import com.github.xiavic.essentials.events.AFKEvents;
 import com.github.xiavic.essentials.events.JoinQuit;
+import com.github.xiavic.essentials.events.PlayerMove;
 import com.github.xiavic.essentials.events.RespawnEvent;
 import com.github.xiavic.essentials.utils.CommandBooleanValue;
 import com.github.xiavic.essentials.utils.EquipAnything.ChatEvent;
@@ -159,7 +158,7 @@ public class Main extends JavaPlugin {
     private void registerCommands() {
         Objects.requireNonNull(getCommand(Main.commands.getString("CheatArmor"))).setExecutor(new CheatArmor());
         Objects.requireNonNull(getCommand(Main.commands.getString("CheatEXP"))).setExecutor(new CheatEXP());
-        Objects.requireNonNull(getCommand(Main.commands.getString("Freeze"))).setExecutor(new FreezeCommand());
+        //Objects.requireNonNull(getCommand(Main.commands.getString("Freeze"))).setExecutor(new FreezeCommand());
         // Objects.requireNonNull(getCommand(Main.commands.getString("Sudo"))).setExecutor(new SudoCommand());
         // Objects.requireNonNull(getCommand(Main.commands.getString("Vanish"))).setExecutor(new VanishCommand());
         // Objects.requireNonNull(getCommand(Main.commands.getString("World"))).setExecutor(new WorldCommand());
@@ -193,6 +192,7 @@ public class Main extends JavaPlugin {
         pm.registerEvents(new MiscHandler(), this);
         pm.registerEvents(nmsImpl.getSignEditor(), this);
         pm.registerEvents(new ChatEvent(), this);
+        pm.registerEvents(new PlayerMove(), this);
         //pm.registerEvents(new Databases(), this);
     }
 

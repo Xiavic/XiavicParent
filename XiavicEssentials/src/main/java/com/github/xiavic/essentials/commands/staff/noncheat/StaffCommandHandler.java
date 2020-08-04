@@ -5,7 +5,9 @@ import co.aikar.commands.BukkitCommandManager;
 import co.aikar.commands.annotation.*;
 import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import com.github.xiavic.essentials.Main;
+import com.github.xiavic.essentials.utils.Misc.everythingElse;
 import com.github.xiavic.essentials.utils.Utils;
+import com.github.xiavic.essentials.utils.handlers.misc.FreezeHandler;
 import com.github.xiavic.essentials.utils.messages.CommandMessages;
 import com.github.xiavic.essentials.utils.messages.Messages;
 import jdk.nashorn.internal.ir.annotations.Ignore;
@@ -217,6 +219,19 @@ import java.util.UUID;
                 target.hidePlayer(player);
             }
             Utils.sendMessage(player, "messages.vanish-enabled");
+        }
+    }
+
+    @Default @CommandAlias("freeze") @CommandPermission("Xiavic.staff.freeze") @CommandCompletion("@players")
+    public void toggleFreeze(Player player, OnlinePlayer target) {
+        if (!FreezeHandler.frozenPlayers.contains(target.player.getUniqueId())) {
+            FreezeHandler.freezePlayer(target.player);
+            Utils.sendMessage(player, "freeze.froze-player", "%target%", target.player.getDisplayName());
+            Utils.sendMessage(target.player, "freeze.been-frozen", "%staffMember%", player.getDisplayName());
+        } else {
+            FreezeHandler.unFreezePlayer(target.player);
+            Utils.sendMessage(player, "freeze.unfroze-player", "%target%", target.player.getDisplayName());
+            Utils.sendMessage(target.player, "freeze.been-unfrozen", "%staffMember%", player.getDisplayName());
         }
     }
 

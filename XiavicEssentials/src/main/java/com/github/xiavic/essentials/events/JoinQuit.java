@@ -5,6 +5,8 @@ import com.github.xiavic.essentials.commands.staff.noncheat.StaffCommandHandler;
 import com.github.xiavic.essentials.utils.LocationUtils;
 import com.github.xiavic.essentials.utils.Misc.everythingElse;
 import com.github.xiavic.essentials.utils.Utils;
+import com.github.xiavic.essentials.utils.handlers.misc.FreezeHandler;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,7 +26,12 @@ public class JoinQuit implements Listener {
         } else {
             if (!StaffCommandHandler.vanishedPlayers.contains(player.getUniqueId())) {
                 event.setJoinMessage(Utils.convertRGBColor(Main.messages.getString("messages.rejoin").replace("%player%", player.getDisplayName())));
-                if (everythingElse.isFrozen(player)) { Utils.sendMessage(player, "message.player-frozen"); }
+                if (FreezeHandler.isFrozen(player)) { Utils.sendMessage(player, "messages.player-frozen"); }
+            } else {
+                event.setJoinMessage(null);
+                for (Player target : Bukkit.getOnlinePlayers()) {
+                    target.hidePlayer(player);
+                }
             }
         }
 
@@ -35,6 +42,8 @@ public class JoinQuit implements Listener {
         Player player = event.getPlayer();
         if (!StaffCommandHandler.vanishedPlayers.contains(player.getUniqueId())) {
             event.setQuitMessage(Utils.convertRGBColor(Main.messages.getString("messages.quit").replace("%player%", player.getDisplayName())));
+        } else {
+            event.setQuitMessage(null);
         }
     }
 }

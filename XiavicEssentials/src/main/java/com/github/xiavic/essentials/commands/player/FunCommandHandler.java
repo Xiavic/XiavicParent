@@ -3,7 +3,9 @@ package com.github.xiavic.essentials.commands.player;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.BukkitCommandManager;
 import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.CommandPermission;
+import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import com.destroystokyo.paper.inventory.meta.ArmorStandMeta;
 import com.github.xiavic.essentials.Main;
 import com.github.xiavic.essentials.utils.Utils;
@@ -174,6 +176,13 @@ public class FunCommandHandler extends BaseCommand {
         highestBlock.setDirection(current.getDirection());
         PaperLib.teleportAsync(player, highestBlock);
 
+    }
+
+    @CommandAlias("smite") @CommandPermission("Xiavic.player.smite") @CommandCompletion("@players")
+    public void smitePlayer(Player player, OnlinePlayer target) {
+        Location targetLoc = target.getPlayer().getLocation().clone();
+        target.getPlayer().getWorld().strikeLightning(targetLoc);
+        Utils.sendLegacyMessage(player, "YOU USED LIGHTNING!");
     }
 
     @CommandAlias("pony") @CommandPermission("xiavic.player.pony")
