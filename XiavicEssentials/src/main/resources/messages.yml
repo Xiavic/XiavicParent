@@ -112,8 +112,18 @@ warps:
   list: "#eb8034Warps:\n%list%"
   already-exists: "#eb8034Sorry, We could not create that warp cause it already exists!"
   successfully-created: "#eb8034Created Warp!"
-
-
+  invalid-warp: "#eb8034Sorry, That doesn't exist!"
+  warp-disabled: "#eb8034Sorry, That warp is not active!"
+  no-permission: "#eb8034You do not have permission to travel to that Warp!"
+  successful-teleport: "#32a834Success! You have traveled to %warp%!"
+  error-occurred: "#a83232Error, please report this to the server administator!"
+  warp-removed: "#32a834Success! You have removed %warp%!"
+  info: "#32a834%warpName% Details: \n#eb8034   Permission: #32a834%permnode%\n   #eb8034Enabled: #32a834%warpEnabled%\n   #eb8034Location:\n   #32a834%warpWorld%\n   %warpX%\n   %warpY%\n   %warpZ%"
+  saved: "#32a834Success! You have saved all public warps to file!"
+  loaded: "#32a834Success! You have loaded all public warps from file!"
+  edit-failed: "#f54842Error! Could not edit the warp!"
+  edit-success: "#32a834Success! You have edited the warp!"
+  
 
 # utils.Listeners
 commands:

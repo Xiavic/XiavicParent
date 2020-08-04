@@ -8,6 +8,7 @@ import com.github.xiavic.essentials.Main;
 import com.github.xiavic.essentials.utils.Utils;
 import com.github.xiavic.essentials.utils.messages.CommandMessages;
 import com.github.xiavic.essentials.utils.messages.Messages;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -16,10 +17,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 @SuppressWarnings("unused") public class StaffCommandHandler extends BaseCommand {
 
     private static final CommandMessages commandMessages = CommandMessages.INSTANCE;
     private static final Messages messages = Messages.INSTANCE;
+    public static List<UUID> vanishedPlayers = new ArrayList<>();
 
     public StaffCommandHandler(@NotNull final BukkitCommandManager commandManager) {
         commandManager.registerCommand(this);
@@ -196,4 +202,24 @@ import org.jetbrains.annotations.NotNull;
                 "&6Gamemode: &9" + otherplayer.player.getGameMode() + "&6, Can Fly: &9" + otherplayer.player.getAllowFlight(),
                 "&6First Joined: &9" + otherplayer.player.getFirstPlayed() + "&6, Last Played: &9" + otherplayer.player.getLastSeen());
     }
+
+    @Default @CommandAlias("vanish") @CommandPermission("Xiavic.staff.vanish") @SuppressWarnings("deprecation")
+    public void toggleVanish(Player player) {
+        if (vanishedPlayers.contains(player.getUniqueId())) {
+            vanishedPlayers.remove(player.getUniqueId());
+            for (Player target : Bukkit.getOnlinePlayers()) {
+                target.showPlayer(player);
+            }
+            Utils.sendMessage(player, "messages.vanish-disabled");
+        } else {
+            vanishedPlayers.add(player.getUniqueId());
+            for (Player target : Bukkit.getOnlinePlayers()) {
+                target.hidePlayer(player);
+            }
+            Utils.sendMessage(player, "messages.vanish-enabled");
+        }
+    }
+
+
+
 }

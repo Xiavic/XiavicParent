@@ -3,27 +3,31 @@ package com.github.xiavic.essentials;
 // import com.github.xiavic.essentials.Utils.Misc.Databases;
 
 import co.aikar.commands.*;
-import com.github.xiavic.essentials.commands.player.TeleportationCommandHandler;
-import com.github.xiavic.essentials.commands.player.EssentialCommandHandler;
-import com.github.xiavic.essentials.commands.player.WarpCommandHandler;
-import com.github.xiavic.essentials.commands.player.FunCommandHandler;
-import com.github.xiavic.essentials.commands.player.LinksCommandHandler;
+import com.github.xiavic.essentials.commands.player.*;
 import com.github.xiavic.essentials.commands.staff.cheats.CheatArmor;
 import com.github.xiavic.essentials.commands.staff.cheats.CheatEXP;
-import com.github.xiavic.essentials.commands.staff.noncheat.*;
+import com.github.xiavic.essentials.commands.staff.noncheat.FreezeCommand;
+import com.github.xiavic.essentials.commands.staff.noncheat.StaffCommandHandler;
+import com.github.xiavic.essentials.commands.staff.noncheat.SudoCommand;
+import com.github.xiavic.essentials.commands.staff.noncheat.VanishCommand;
 import com.github.xiavic.essentials.commands.staff.noncheat.teleport.StaffTeleportCommandHandler;
+import com.github.xiavic.essentials.events.AFKEvents;
+import com.github.xiavic.essentials.events.JoinQuit;
+import com.github.xiavic.essentials.events.RespawnEvent;
 import com.github.xiavic.essentials.utils.CommandBooleanValue;
+import com.github.xiavic.essentials.utils.EquipAnything.ChatEvent;
 import com.github.xiavic.essentials.utils.EquipAnything.EquipEvents;
+import com.github.xiavic.essentials.utils.Utils;
 import com.github.xiavic.essentials.utils.acf.TabCompletions;
+import com.github.xiavic.essentials.utils.events.*;
 import com.github.xiavic.essentials.utils.handlers.teleportation.TeleportationHandler;
 import com.github.xiavic.essentials.utils.handlers.teleportation.TpaHandler;
-import com.github.xiavic.essentials.utils.Utils;
-import com.github.xiavic.essentials.utils.events.*;
 import com.github.xiavic.essentials.utils.messages.Messages;
 import com.github.xiavic.lib.NMSHandler.NMS;
 import com.github.xiavic.lib.NMSHandler.NMSVersion;
 import com.github.xiavic.lib.inventory.InventorySerializer;
 import com.github.xiavic.lib.signedit.ISignEditor;
+import de.leonhard.storage.Json;
 import de.leonhard.storage.LightningBuilder;
 import de.leonhard.storage.Yaml;
 import de.leonhard.storage.internal.settings.ConfigSettings;
@@ -32,23 +36,27 @@ import de.leonhard.storage.internal.settings.ReloadSettings;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.*;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.ServicePriority;
+import org.bukkit.plugin.ServicesManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import java.io.File;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 
-public final class Main extends JavaPlugin {
+public class Main extends JavaPlugin {
 
     public static Yaml permissions;
     public static Yaml messages;
-    public static Messages messages_new = Messages.INSTANCE;
     public static Yaml mainConfig;
     public static Yaml commands;
     public static Yaml database;
+    public static Json warps;
+    public static Json pwarps;
+
+    public static Messages messages_new = Messages.INSTANCE;
     public static TpaHandler tpaHandler;
     public static TeleportationHandler teleportHandler;
     public static NMS nmsImpl; //Should never be null after plugin init has completed.
@@ -83,7 +91,7 @@ public final class Main extends JavaPlugin {
         registerCommandsUtils();
         TabCompletions.init(commandManager);
         registerCommands();
-        Bukkit.getScheduler().runTaskTimer(this, tpaHandler::doChecks, 0, 20);
+        // Bukkit.getScheduler().runTaskTimer(this, tpaHandler::doChecks, 0, 20);
     }
 
     @Override
@@ -152,8 +160,8 @@ public final class Main extends JavaPlugin {
         Objects.requireNonNull(getCommand(Main.commands.getString("CheatArmor"))).setExecutor(new CheatArmor());
         Objects.requireNonNull(getCommand(Main.commands.getString("CheatEXP"))).setExecutor(new CheatEXP());
         Objects.requireNonNull(getCommand(Main.commands.getString("Freeze"))).setExecutor(new FreezeCommand());
-        Objects.requireNonNull(getCommand(Main.commands.getString("Sudo"))).setExecutor(new SudoCommand());
-        Objects.requireNonNull(getCommand(Main.commands.getString("Vanish"))).setExecutor(new VanishCommand());
+        // Objects.requireNonNull(getCommand(Main.commands.getString("Sudo"))).setExecutor(new SudoCommand());
+        // Objects.requireNonNull(getCommand(Main.commands.getString("Vanish"))).setExecutor(new VanishCommand());
         // Objects.requireNonNull(getCommand(Main.commands.getString("World"))).setExecutor(new WorldCommand());
 
         //Modern Commands:
@@ -167,6 +175,14 @@ public final class Main extends JavaPlugin {
 
     }
 
+    // Use this function for creating new shit
+    private void registerShit() {
+        tpaHandler = new TpaHandler();
+        tpaHandler.loadTeleportHandler();
+        teleportHandler = new TeleportationHandler();
+        Bukkit.getScheduler().runTaskTimer(this, tpaHandler, 0, 20);
+    }
+
     private void registerListeners() {
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new JoinQuit(), this);
@@ -178,14 +194,6 @@ public final class Main extends JavaPlugin {
         pm.registerEvents(nmsImpl.getSignEditor(), this);
         pm.registerEvents(new ChatEvent(), this);
         //pm.registerEvents(new Databases(), this);
-    }
-
-    // Use this function for creating new shit
-    private void registerShit() {
-        tpaHandler = new TpaHandler();
-        tpaHandler.loadTeleportHandler();
-        teleportHandler = new TeleportationHandler();
-        Bukkit.getScheduler().runTaskTimer(this, tpaHandler, 0, 20);
     }
 
     private boolean registerNMSHandler() {
@@ -223,7 +231,7 @@ public final class Main extends JavaPlugin {
         ////////////////
         // messages.yml
         ////////////////
-        messages = (LightningBuilder.fromFile(new File("plugins/XiavicCore/Resources/messages"))
+        messages = (LightningBuilder.fromFile(new File("plugins/XiavicEssentials/resources/messages"))
                 .addInputStreamFromResource("messages.yml")
                 .setConfigSettings(ConfigSettings.PRESERVE_COMMENTS)
                 .setReloadSettings(ReloadSettings.AUTOMATICALLY)
@@ -236,7 +244,7 @@ public final class Main extends JavaPlugin {
         ////////////////
         // config.yml
         ////////////////
-        mainConfig = LightningBuilder.fromFile(new File("plugins/XiavicCore/config"))
+        mainConfig = LightningBuilder.fromFile(new File("plugins/XiavicEssentials/config"))
                 .addInputStreamFromResource("config.yml")
                 .setConfigSettings(ConfigSettings.PRESERVE_COMMENTS)
                 .setReloadSettings(ReloadSettings.AUTOMATICALLY)
@@ -246,7 +254,7 @@ public final class Main extends JavaPlugin {
         ////////////////
         // commands.yml
         ////////////////
-        commands = LightningBuilder.fromFile(new File("plugins/XiavicCore/Resources/commands"))
+        commands = LightningBuilder.fromFile(new File("plugins/XiavicEssentials/resources/commands"))
                 .addInputStreamFromResource("commands.yml")
                 .setConfigSettings(ConfigSettings.PRESERVE_COMMENTS)
                 .setReloadSettings(ReloadSettings.AUTOMATICALLY)
@@ -256,7 +264,7 @@ public final class Main extends JavaPlugin {
         ////////////////
         // database.yml
         ////////////////
-        database = LightningBuilder.fromFile(new File("plugins/XiavicCore/Resources/database"))
+        database = LightningBuilder.fromFile(new File("plugins/XiavicEssentials/resources/database"))
                 .addInputStreamFromResource("database.yml")
                 .setConfigSettings(ConfigSettings.PRESERVE_COMMENTS)
                 .setReloadSettings(ReloadSettings.AUTOMATICALLY)
@@ -268,6 +276,22 @@ public final class Main extends JavaPlugin {
         //     ////////////////
         //     Json players = new Json("players", Bukkit.getServer().getWorldContainer() + "/plugins/XiavicCore/Resources");
         //     players.set("players." + "NightPotato.Rank", "ThatNewGuy!");
+
+        ////////////////
+        // warps.json
+        ////////////////
+        warps = LightningBuilder.fromFile(new File("plugins/XiavicEssentials/data/warps"))
+                .setReloadSettings(ReloadSettings.INTELLIGENT)
+                .setDataType(DataType.UNSORTED)
+                .createJson();
+
+        ////////////////
+        // privatewarps.json
+        ////////////////
+        pwarps = LightningBuilder.fromFile(new File("plugins/XiavicEssentials/data/privatewarps"))
+                .setReloadSettings(ReloadSettings.INTELLIGENT)
+                .setDataType(DataType.UNSORTED)
+                .createJson();
 
 
     }

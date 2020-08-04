@@ -47,7 +47,7 @@
                         <configuration>
                             <outputDirectory>${project.parent.build.directory}</outputDirectory>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <finalName>Xiavic-${project.version}</finalName>
+                            <finalName>XiavicEssentials</finalName>
                             <artifactSet>
                                 <excludes>
                                     <exclude>org.jetbrains:annotations</exclude>
