@@ -93,6 +93,11 @@
         </dependency>
         <dependency>
             <groupId>com.github.xiavic</groupId>
+            <artifactId>xiavic-bukkit-1.16.2</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.xiavic</groupId>
             <artifactId>xiavic-bukkit-1.16</artifactId>
             <version>1.0</version>
         </dependency>

@@ -14,6 +14,7 @@
         <module>jar-builder</module>
         <module>XiavicLib</module>
         <module>XiavicEssentials</module>
+        <module>nms/bukkit-1.16.2</module>
         <module>nms/bukkit-1.16</module>
         <module>nms/bukkit-1.15</module>
         <module>nms/bukkit-1.14</module>
@@ -60,7 +61,8 @@
         <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
-            <version>18.0.0</version>
+            <version>19.0.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.JavaFactoryDev</groupId>
