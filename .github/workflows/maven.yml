@@ -83,6 +83,21 @@ jobs:
         java -jar ./temp/BuildTools.jar --rev $VERSION
         echo "Pausing for 10 seconds..."
         sleep 10
+    - name: Build-1.16.2
+      run: |
+        VERSION=1.16.2
+        ARTIFACT='spigot-'$VERSION'-R0.1-SNAPSHOT.jar'
+
+        FILE=~/.m2/repository/org/spigotmc/spigot/$VERSION'-R0.1-SNAPSHOT/spigot-'$VERSION'-R0.1-SNAPSHOT.jar'
+        echo $FILE
+        if test -f $FILE; then 
+          echo "$VERSION already exists. Skipping..."
+          exit 0 
+        fi
+        echo "Building and installing $VERSION"
+        java -jar ./temp/BuildTools.jar --rev $VERSION
+        echo "Pausing for 10 seconds..."
+        sleep 10
       
     - name: Build with Maven
       run: mvn -B package --file pom.xml
