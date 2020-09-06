@@ -46,6 +46,10 @@
                             <pattern>co.aikar.idb</pattern>
                             <shadedPattern>com.github.xiavic.lib.idb</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>io.papermc.lib</pattern>
+                            <shadedPattern>com.github.xiavic.lib.paperlib</shadedPattern>
+                        </relocation>
                     </relocations>
                     <outputDirectory>${project.parent.build.directory}</outputDirectory>
                 </configuration>
@@ -113,6 +117,11 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>2.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>io.papermc</groupId>
+            <artifactId>paperlib</artifactId>
+            <version>1.0.5</version>
         </dependency>
     </dependencies>
 

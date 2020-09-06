@@ -1,6 +1,7 @@
 package com.github.xiavic.essentials.v1_16_R2;
 
 import com.github.xiavic.lib.signedit.AbstractSignEditor;
+import io.papermc.lib.PaperLib;
 import net.minecraft.server.v1_16_R2.*;
 import org.bukkit.block.Sign;
 import org.bukkit.craftbukkit.v1_16_R2.block.CraftBlockEntityState;
@@ -13,6 +14,10 @@ import java.lang.reflect.Field;
 public class SimpleSignEditor extends AbstractSignEditor {
 
     @Override public void openUI(final @NotNull Player player, final @NotNull Sign sign) {
+        if (PaperLib.isPaper()) {
+            player.openSign(sign);
+            return;
+        }
         final EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
         final PlayerConnection connection = entityPlayer.playerConnection;
         final TileEntitySign tileSign;

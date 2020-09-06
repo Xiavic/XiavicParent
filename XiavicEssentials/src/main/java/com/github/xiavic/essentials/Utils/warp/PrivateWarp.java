@@ -1,6 +1,5 @@
 package com.github.xiavic.essentials.Utils.warp;
 
-import com.github.xiavic.essentials.Utils.Lockable;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.permissions.Permissible;
@@ -12,7 +11,8 @@ import java.util.*;
 /**
  * Represents a warp which would be used in /pw, /privatewarp
  */
-public class PrivateWarp extends Warp implements Lockable {
+public class PrivateWarp extends Warp {
+
     private UUID owner;
     private Collection<UUID> whitelisted = new HashSet<>();
     private Collection<UUID> blacklisted = new HashSet<>();
@@ -43,18 +43,12 @@ public class PrivateWarp extends Warp implements Lockable {
 
     @NotNull
     public Collection<UUID> getWhitelisted() {
-        lock();
-        final Collection<UUID> collection = new ArrayList<>(this.whitelisted);
-        unlock();
-        return collection;
+        return new ArrayList<>(this.whitelisted);
     }
 
     @NotNull
     public Collection<UUID> getBlacklisted() {
-        lock();
-        final Collection<UUID> collection = new ArrayList<>(blacklisted);
-        unlock();
-        return collection;
+        return new ArrayList<>(blacklisted);
     }
 
     public boolean isWhitelisted(final UUID uuid) {
@@ -62,10 +56,7 @@ public class PrivateWarp extends Warp implements Lockable {
     }
 
     public boolean isBlacklisted(final UUID uuid) {
-        lock();
-        boolean value = blacklisted.contains(uuid);
-        unlock();
-        return value;
+        return blacklisted.contains(uuid);
     }
 
     @NotNull
@@ -75,9 +66,7 @@ public class PrivateWarp extends Warp implements Lockable {
 
     @NotNull
     public PrivateWarp setOwner(final UUID owner) {
-        lock();
         this.owner = owner;
-        unlock();
         return this;
     }
 
@@ -88,22 +77,18 @@ public class PrivateWarp extends Warp implements Lockable {
      * @param player The UniqueID of the player.
      */
     public void addToWhitelist(final UUID player) {
-        lock();
         whitelisted.remove(player);
         whitelisted.add(player);
         blacklisted.remove(player);
-        unlock();
     }
 
     @Override
     public boolean canBeAccessedBy(final Permissible permissible) {
         if (permissible instanceof Entity) {
-            lock();
             Entity entity = (Entity) permissible;
             final UUID uuid = entity.getUniqueId();
             boolean bool = !isBlacklisted(uuid);
             bool = isEnabled() && whitelisted.isEmpty() ? bool : isWhitelisted(uuid);
-            unlock();
             return bool;
         }
         return false;
@@ -131,23 +116,17 @@ public class PrivateWarp extends Warp implements Lockable {
      * @param player The UniqueID of the player.
      */
     public void addToBlacklist(final UUID player) {
-        lock();
         blacklisted.remove(player);
         blacklisted.add(player);
         whitelisted.remove(player);
-        unlock();
     }
 
     public void removeFromWhitelist(final UUID player) {
-        lock();
         whitelisted.remove(player);
-        unlock();
     }
 
     public void removeFromBlacklist(final UUID player) {
-        lock();
         blacklisted.remove(player);
-        unlock();
     }
 
     @Override
@@ -159,31 +138,22 @@ public class PrivateWarp extends Warp implements Lockable {
         if (!super.equals(o))
             return false;
         PrivateWarp that = (PrivateWarp) o;
-        lock();
-        that.lock();
         if (!Objects.equals(whitelisted, that.whitelisted)) {
-            unlock();
-            that.unlock();
             return false;
         }
         if (!Objects.equals(owner, that.owner)) {
-            unlock();
-            that.unlock();
             return false;
         }
         final boolean value = Objects.equals(blacklisted, that.blacklisted);
-        unlock();
         return value;
     }
 
     @Override
     public int hashCode() {
-        lock();
         int result = super.hashCode();
         result = 31 * result + (whitelisted != null ? whitelisted.hashCode() : 0);
         result = 31 * result + (blacklisted != null ? blacklisted.hashCode() : 0);
         result = 31 * result + owner.hashCode();
-        unlock();
         return result;
     }
 }

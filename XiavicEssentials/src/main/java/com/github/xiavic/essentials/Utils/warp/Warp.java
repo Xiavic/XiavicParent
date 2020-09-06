@@ -1,6 +1,5 @@
 package com.github.xiavic.essentials.Utils.warp;
 
-import com.github.xiavic.essentials.Utils.Lockable;
 import io.papermc.lib.PaperLib;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -11,11 +10,13 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
-public class Warp implements Lockable {
+public class Warp {
 
     private final UUID uniqueID;
-    private transient volatile Thread locker;
     private boolean enabled;
 
     private String name;
@@ -41,16 +42,11 @@ public class Warp implements Lockable {
     }
 
     @NotNull public String getName() {
-        lock();
-        final String name = this.name;
-        unlock();
-        return name;
+        return this.name;
     }
 
     public Warp setName(@NotNull final String name) {
-        lock();
         this.name = name;
-        unlock();
         return this;
     }
 
@@ -59,37 +55,24 @@ public class Warp implements Lockable {
     }
 
     public boolean hasPermission() {
-        lock();
-        boolean result = permission != null && !permission.isEmpty();
-        unlock();
-        return result;
+        return permission != null && !permission.isEmpty();
     }
 
     public String getPermission() {
-        lock();
-        final String permission = this.permission;
-        unlock();
-        return permission;
+        return this.permission;
     }
 
     public Warp setPermission(@Nullable final String permission) {
-        lock();
         this.permission = permission;
-        unlock();
         return this;
     }
 
     public @NotNull Location getLocation() {
-        lock();
-        final Location cloned = this.location.clone();
-        unlock();
-        return cloned;
+        return this.location.clone();
     }
 
     public Warp setLocation(@NotNull final Location location) {
-        lock();
         this.location = location;
-        unlock();
         return this;
     }
 
@@ -98,9 +81,7 @@ public class Warp implements Lockable {
     }
 
     public Warp setEnabled(final boolean enabled) {
-        lock();
         this.enabled = enabled;
-        unlock();
         return this;
     }
 
@@ -115,27 +96,6 @@ public class Warp implements Lockable {
         return PaperLib.teleportAsync(entity, location);
     }
 
-    @Override public boolean isLocked() {
-        return locker == null;
-    }
-
-    @Override public Thread getLocker() {
-        return locker;
-    }
-
-    @Override public void lock() {
-        while (isLocked())
-            ;
-        this.locker = Thread.currentThread();
-    }
-
-    @Override public void unlock() {
-        if (!isLocked() || locker != Thread.currentThread()) {
-            return;
-        }
-        this.locker = null;
-    }
-
     @Override public boolean equals(final Object o) {
 
         if (this == o)
@@ -144,36 +104,23 @@ public class Warp implements Lockable {
             return false;
 
         Warp warp = (Warp) o;
-        lock();
-        warp.lock();
         if (!Objects.equals(uniqueID, warp.uniqueID)) {
-            unlock();
-            warp.unlock();
             return false;
         }
         if (!Objects.equals(name, warp.name)) {
-            unlock();
-            warp.unlock();
             return false;
         }
         if (!Objects.equals(permission, warp.permission)) {
-            unlock();
-            warp.unlock();
             return false;
         }
-        boolean value = Objects.equals(location, warp.location);
-        unlock();
-        warp.unlock();
-        return value;
+        return Objects.equals(location, warp.location);
     }
 
     @Override public int hashCode() {
-        lock();
         int result = uniqueID.hashCode();
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (permission != null ? permission.hashCode() : 0);
         result = 31 * result + (location != null ? location.hashCode() : 0);
-        unlock();
         return result;
     }
 }
