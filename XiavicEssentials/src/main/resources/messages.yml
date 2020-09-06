@@ -52,7 +52,6 @@ messages:
   value-false: "False... usuk"
   quit: "&8[&c-&8] &c%player%"
   rejoin: "&8[&6+&8] &e%player%"
-
   item-is-air: "&cYou are holding air, not an item..."
   invalid-number: "Only whole numbers between 1-10 may be chosen."
   player-frozen: "&c&lYou are still frozen, please contact a server administrator to be un-frozen!"
@@ -110,9 +109,11 @@ teleport:
 
 
 warps:
-  list: "`eb8034Warps:\n%list%"
-  already-exists: "`eb8034Sorry, We could not create that warp cause it already exists!"
-  successfully-created: "`eb8034Created Warp!"
+  list: "#eb8034Warps:\n%list%"
+  already-exists: "#eb8034Sorry, We could not create that warp cause it already exists!"
+  successfully-created: "#eb8034Created Warp!"
+
+
 
 # utils.Listeners
 commands:
@@ -158,30 +159,6 @@ commands:
   hat: "You have equipped %item% to your head area"
   extinguish: "&cYour inner demon has calmed down"
   extinguish-target: "You have been extinguished by, %sender%"
-
-#Warp
-warp:
-  created: "Warp \"%name%\" has been created."
-  deleted: "Warp was deleted."
-  toggled: "This warp is now %enabled%"
-  failure-disabled: "This warp is disabled."
-  other-failure: "%player% could not be warped, reason: %reason%"
-  teleport-success-other: "%player% was successfully teleported to %warp%"
-  permission: "The permission for this warp is: %permission%"
-  permission-edited: "The permission for this warp has been updated"
-  null-permission: "This warp has no permission set"
-  whitelist: "Warp whitelist has been %enabled%."
-  blacklist: "Warp blacklist has been %enabled%."
-  access-denied: "You may not access this warp!"
-  whitelist-player: "%player% has been %operation% to the whitelist."
-  blacklist-player: "%player% has been %operation% to the blacklist."
-  unsafe: "That warp is not safe!"
-  list-header: "Warps:"
-  list-element-header: "  %warp%"
-  list-element-info: "     Name: %name%, Permission: %permission%, Location: %location%, Enabled: %enabled%"
-  private-list-header: "Private Warps: "
-  private-list-element-header: "  %warp%"
-  private-list-element-info: "     Name: %name%, Owner: %owner%, Location: %location%, Enabled: %enabled%"
 
 # Links
 links:

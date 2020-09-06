@@ -4,7 +4,7 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.BukkitCommandManager;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
-import com.github.xiavic.essentials.Utils.Utils;
+import com.github.xiavic.essentials.utils.Utils;
 import org.bukkit.command.CommandSender;
 
 public class LinksCommandHandler extends BaseCommand {

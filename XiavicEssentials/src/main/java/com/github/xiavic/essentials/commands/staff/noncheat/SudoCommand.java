@@ -1,6 +1,6 @@
 package com.github.xiavic.essentials.commands.staff.noncheat;
 
-import com.github.xiavic.essentials.Utils.Utils;
+import com.github.xiavic.essentials.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

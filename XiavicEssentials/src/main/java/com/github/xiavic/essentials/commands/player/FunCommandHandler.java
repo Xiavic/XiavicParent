@@ -6,13 +6,10 @@ import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import com.destroystokyo.paper.inventory.meta.ArmorStandMeta;
 import com.github.xiavic.essentials.Main;
-import com.github.xiavic.essentials.Utils.Utils;
+import com.github.xiavic.essentials.utils.Utils;
 import com.github.xiavic.lib.NMSHandler.NMSVersion;
 import io.papermc.lib.PaperLib;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
@@ -25,10 +22,13 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings("unused")
 public class FunCommandHandler extends BaseCommand {
+
+    private final static ChatColor[] rainbow = { ChatColor.RED, ChatColor.GOLD, ChatColor.YELLOW, ChatColor.GREEN, ChatColor.BLUE, ChatColor.DARK_BLUE, ChatColor.DARK_PURPLE };
 
     public FunCommandHandler(BukkitCommandManager commandManager) {
         commandManager.registerCommand(this);
@@ -176,6 +176,15 @@ public class FunCommandHandler extends BaseCommand {
 
     }
 
+    @CommandAlias("pony") @CommandPermission("xiavic.player.pony")
+    public void onPony(Player player) {
+        String[] ponies = { Utils.convertLegacyCColor("&fRarity is best pony!"), Utils.convertLegacyCColor("&6AppleJack is best pony!"), Utils.convertLegacyCColor("&eFluttershy is best pony"), Utils.convertLegacyCColor("&eFlutterBitch is best bitch."), Utils.convertLegacyCColor("&eFlutterHurricane!!!!!!!!1"), Utils.convertLegacyCColor("&5Twilight sparkle is best pony!"), Utils.convertLegacyCColor("&1Luna is best pony!"), Utils.convertLegacyCColor("&dand then I said, OATMEAL?! ARE YOU CRAZY -Pinkie Pie"), rainbowizeString("RainbowDash") + Utils.convertLegacyCColor(" &9is best pony"), Utils.convertLegacyCColor("&eDerpyHooves is derpy..."), rainbowizeString("SONIC RAINBOOM"), rainbowizeString("ATOMIC RAINBOOM"), rainbowizeString("RAINBOW FIRE TRAIL!"), rainbowizeString("MLP:FIM IS TEH BEST!"), rainbowizeString("Pony Swag") };
+        Random r = new Random();
+
+        player.sendMessage(Utils.convertLegacyCColor(Main.messages.getString("commands.pony")).replace("%Random_Pony%", ponies[r.nextInt(ponies.length)]).replace("%PonyPerson%", Utils.convertLegacyCColor(rainbowizeString(Main.messages.getString("commands.pony-person")))));
+
+    }
+
     /*
         Helper Methods are found below. All Commands should and are above
         this header. If the command is below, we need to move it.
@@ -256,4 +265,23 @@ public class FunCommandHandler extends BaseCommand {
             Utils.chat(sender, "&3Raw Block Data Info: &bNo Block Data Found.");
         }
     }
+
+    public static String rainbowizeString(String string) {
+        StringBuilder sb = new StringBuilder();
+        int rb = 0;
+        char[] chars = string.toCharArray();
+        for (char aChar : chars) {
+            if ((int) aChar != 32) {
+                sb.append(rainbow[rb]);
+            }
+            sb.append(aChar);
+            if (++rb >= rainbow.length) {
+                rb = 0;
+            }
+        }
+        return sb.toString();
+    }
+
+
+
 }

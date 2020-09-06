@@ -3,25 +3,23 @@ package com.github.xiavic.essentials;
 // import com.github.xiavic.essentials.Utils.Misc.Databases;
 
 import co.aikar.commands.*;
-import com.github.xiavic.essentials.commands.player.Essential.*;
-import com.github.xiavic.essentials.commands.player.Essential.Teleport.TeleportationCommandHandler;
-import com.github.xiavic.essentials.commands.player.Essential.WarpCommandHandler;
-import com.github.xiavic.essentials.commands.player.Fun.*;
+import com.github.xiavic.essentials.commands.player.TeleportationCommandHandler;
+import com.github.xiavic.essentials.commands.player.EssentialCommandHandler;
+import com.github.xiavic.essentials.commands.player.WarpCommandHandler;
 import com.github.xiavic.essentials.commands.player.FunCommandHandler;
 import com.github.xiavic.essentials.commands.player.LinksCommandHandler;
 import com.github.xiavic.essentials.commands.staff.cheats.CheatArmor;
 import com.github.xiavic.essentials.commands.staff.cheats.CheatEXP;
 import com.github.xiavic.essentials.commands.staff.noncheat.*;
 import com.github.xiavic.essentials.commands.staff.noncheat.teleport.StaffTeleportCommandHandler;
-import com.github.xiavic.essentials.Utils.CommandBooleanValue;
-import com.github.xiavic.essentials.Utils.EquipAnything.EquipEvents;
-import com.github.xiavic.essentials.Utils.handlers.teleportation.TeleportationHandler;
-import com.github.xiavic.essentials.Utils.handlers.teleportation.TpaHandler;
-import com.github.xiavic.essentials.Utils.Utils;
-import com.github.xiavic.essentials.Utils.events.*;
-import com.github.xiavic.essentials.Utils.messages.Messages;
-import com.github.xiavic.essentials.Utils.warp.PrivateWarpManager;
-import com.github.xiavic.essentials.Utils.warp.WarpManager;
+import com.github.xiavic.essentials.utils.CommandBooleanValue;
+import com.github.xiavic.essentials.utils.EquipAnything.EquipEvents;
+import com.github.xiavic.essentials.utils.acf.TabCompletions;
+import com.github.xiavic.essentials.utils.handlers.teleportation.TeleportationHandler;
+import com.github.xiavic.essentials.utils.handlers.teleportation.TpaHandler;
+import com.github.xiavic.essentials.utils.Utils;
+import com.github.xiavic.essentials.utils.events.*;
+import com.github.xiavic.essentials.utils.messages.Messages;
 import com.github.xiavic.lib.NMSHandler.NMS;
 import com.github.xiavic.lib.NMSHandler.NMSVersion;
 import com.github.xiavic.lib.inventory.InventorySerializer;
@@ -57,9 +55,6 @@ public final class Main extends JavaPlugin {
     private static Main instance;
     private BukkitCommandManager commandManager;
 
-    private static WarpManager warpMan;
-    private static PrivateWarpManager pWarpMan;
-
 
     // Handle Instance of plugin in multiple classes.
     public static Main getInstance() {
@@ -82,16 +77,18 @@ public final class Main extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage("Xiavic Network's Amazing Essentials");
         Bukkit.getConsoleSender().sendMessage("     In Development by the Xiavic Dev Team ");
         Bukkit.getConsoleSender().sendMessage(" ");
+
         registerShit();
         registerListeners();
         registerCommandsUtils();
+        TabCompletions.init(commandManager);
         registerCommands();
         Bukkit.getScheduler().runTaskTimer(this, tpaHandler::doChecks, 0, 20);
     }
 
     @Override
     public void onDisable() {
-
+        // Save Homes, Warps, Private Warps, ands other datasets.
     }
 
     private void registerCommandsUtils() {
@@ -121,6 +118,8 @@ public final class Main extends JavaPlugin {
                 .filter(player -> !players.contains(player.toLowerCase()))
                 .sorted(Comparator.naturalOrder()).collect(Collectors.toList());
         });
+
+
         commandManager.getCommandCompletions().registerCompletion("toggles", context -> {
             final String type = context.getConfig("type", "null");
             switch (type.toLowerCase()) {
@@ -132,10 +131,12 @@ public final class Main extends JavaPlugin {
                     return CommandBooleanValue.ALL_VALUES;
             }
         });
+
         commandManager.getCommandContexts().registerContext(CommandBooleanValue.class,
             context ->
                 CommandBooleanValue.fromString(context.popFirstArg()).orElseThrow(
                     InvalidCommandArgument::new));  //TODO add message
+
         commandManager.setFormat(MessageType.ERROR,
             new BukkitMessageFormatter(ChatColor.RED, ChatColor.GOLD, ChatColor.WHITE) {
                 @Override public String format(final String message) {
@@ -151,7 +152,6 @@ public final class Main extends JavaPlugin {
         Objects.requireNonNull(getCommand(Main.commands.getString("CheatArmor"))).setExecutor(new CheatArmor());
         Objects.requireNonNull(getCommand(Main.commands.getString("CheatEXP"))).setExecutor(new CheatEXP());
         Objects.requireNonNull(getCommand(Main.commands.getString("Freeze"))).setExecutor(new FreezeCommand());
-        Objects.requireNonNull(getCommand(Main.commands.getString("Pony"))).setExecutor(new PonyCommand());
         Objects.requireNonNull(getCommand(Main.commands.getString("Sudo"))).setExecutor(new SudoCommand());
         Objects.requireNonNull(getCommand(Main.commands.getString("Vanish"))).setExecutor(new VanishCommand());
         // Objects.requireNonNull(getCommand(Main.commands.getString("World"))).setExecutor(new WorldCommand());
@@ -215,10 +215,6 @@ public final class Main extends JavaPlugin {
         //Register NMS implementations
         serviceManager.register(ISignEditor.class, nmsImpl.getSignEditor(), this, ServicePriority.Low);
         serviceManager.register(InventorySerializer.class, nmsImpl.getInventorySerializer(), this, ServicePriority.Low);
-        //Register Teleport handlers
-        // serviceManager.register(ITeleportHandler.class, new TeleportHandler(), this, ServicePriority.Low);
-        // serviceManager.register(ITeleportRequestHandler.class, new TpaHandler(), this, ServicePriority.Low);
-        //
     }
 
     // Handling of configuration file with Json, Yaml, and Toml
@@ -276,25 +272,5 @@ public final class Main extends JavaPlugin {
 
     }
 
-    private void loadshit() {
-        saveResource("Resources/permissions.yml", false);
-        saveResource("Resources/messages.yml", false);
-        saveResource("Resources/commands.yml", false);
-        saveResource("config.yml", false);
-    }
-
-    // I am using this function for updating the configs from the files inside the current
-    // build of the plugin and preserves the spawn location in the mainConfig
-    public void updateShit() {
-        String firstspawnLocation = mainConfig.getString("FirstSpawn");
-        String spawnLocation = mainConfig.getString("Spawn");
-        saveResource("Resources/permissions.yml", true);
-        saveResource("Resources/messages.yml", true);
-        saveResource("Resources/commands.yml", true);
-        saveResource("config.yml", true);
-        mainConfig.set("FirstSpawn", firstspawnLocation);
-        mainConfig.set("Spawn", spawnLocation);
-        saveConfig();
-    }
 
 }
